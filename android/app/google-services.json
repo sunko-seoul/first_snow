@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "305816586207",
+    "project_id": "first-snow-1347c",
+    "storage_bucket": "first-snow-1347c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:305816586207:android:6c6c089b04a8504990e66a",
+        "android_client_info": {
+          "package_name": "com.firstsnow.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwc7WcxiUa79pLQGjesxy-qCNtZ-xxyU8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
