@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
 import 'package:first_snow/provider/bottom_nav_provider.dart';
+import 'package:first_snow/provider/card_select_provider.dart';
 import 'package:first_snow/view/home_screen.dart';
 
 void main() async {
@@ -21,6 +22,7 @@ class MyApp extends StatelessWidget {
       home: MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (context) => BottomNavProvider()),
+          ChangeNotifierProvider(create: (context) => CardSelectProvider()),
         ],
         child: HomeScreen(),
       ),
