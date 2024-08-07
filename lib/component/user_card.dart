@@ -63,16 +63,13 @@ Widget userCardFront(int index) {
 Widget userCardBack() {
   return Container(
     decoration: BoxDecoration(
-      // border: Border.all(
-      //   color: GREY_COLOR,
-      //   width: 2.0,
-      // ),
+      borderRadius: BorderRadius.circular(10.0),
       boxShadow: [
         BoxShadow(
           color: Colors.black.withOpacity(0.4),
-          spreadRadius: 2,
+          spreadRadius: 1,
           blurRadius: 5,
-          offset: Offset(-8, 8),
+          offset: Offset(-2, 2),
         ),
       ],
     ),
