@@ -8,14 +8,14 @@ import 'package:provider/provider.dart';
 import 'package:first_snow/view/signup_view.dart';
 import 'package:first_snow/view/password_reset_dialog.dart';
 
-class signinView extends StatefulWidget {
-  const signinView({super.key});
+class SignInView extends StatefulWidget {
+  const SignInView({super.key});
 
   @override
-  State<signinView> createState() => _signinViewState();
+  State<SignInView> createState() => _SignInViewState();
 }
 
-class _signinViewState extends State<signinView> {
+class _SignInViewState extends State<SignInView> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String email = '';
   String password = '';
@@ -59,13 +59,6 @@ class _signinViewState extends State<signinView> {
                 validator: (String? value) {
                   if (value?.isEmpty ?? true) {
                     return '비밀번호를 입력해주세요';
-                  }
-                  if (value!.length < 8) {
-                    return '비밀번호는 8자 이상이어야 합니다.';
-                  }
-                  RegExp reg = RegExp(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$');
-                  if (!reg.hasMatch(value!)) {
-                    return '영문자, 숫자, 특수문자를 각각 하나 이상 포함해야 합니다.';
                   }
                   return null;
                 },
@@ -142,24 +135,16 @@ class _signinViewState extends State<signinView> {
     return false;
   }
 
-  void onRegisterPress() async {
-    if (saveAndValidateForm()) {
-      String text = await context.read<UserProvider>().signUp(email, password);
-      if (text != 'Success') {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(text),
-        ));
-      }
-    }
-  }
-
   void onLoginPress() async {
     if (saveAndValidateForm()) {
       String text = await context.read<UserProvider>().signIn(email, password);
       if (text != 'Success') {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(text),
-        ));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('로그인에 실패하였습니다'),
+            backgroundColor: Colors.grey,
+          ),
+        );
       }
     }
   }

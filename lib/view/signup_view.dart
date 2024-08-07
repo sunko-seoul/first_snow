@@ -78,14 +78,14 @@ class _SignupViewState extends State<SignupView> {
                   if (value?.isEmpty ?? true) {
                     return '비밀번호를 입력해주세요';
                   }
-                  if (value != password) {
+                  if (passwordConfirm != password) {
                     return '비밀번호가 일치하지 않습니다.';
                   }
                   if (value!.length < 8) {
                     return '비밀번호는 8자 이상이어야 합니다.';
                   }
                   RegExp reg = RegExp(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$');
-                  if (!reg.hasMatch(value!)) {
+                  if (!reg.hasMatch(value)) {
                     return '영문자, 숫자, 특수문자를 각각 하나 이상 포함해야 합니다.';
                   }
                   return null;
@@ -111,11 +111,7 @@ class _SignupViewState extends State<SignupView> {
                   Text('이미 계정이 있으신가요?'),
                   TextButton(
                     onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => signinView(),
-                        ),
-                      );
+                      Navigator.of(context).pop();
                     },
                     child: Text(
                       '로그인',
@@ -145,10 +141,15 @@ class _SignupViewState extends State<SignupView> {
   void onRegisterPress() async {
     if (saveAndValidateForm()) {
       String text = await context.read<UserProvider>().signUp(email, password);
-      if (text != 'Success') {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(text),
-        ));
+      if (text == 'Success') {
+        Navigator.of(context).pop();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('회원가입에 실패했습니다.'),
+            backgroundColor: Colors.grey,
+          ),
+        );
       }
     }
   }

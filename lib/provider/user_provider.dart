@@ -22,9 +22,10 @@ class UserProvider extends ChangeNotifier {
    , _user = FirebaseAuth.instance.currentUser
    , _status = FirebaseAuth.instance.currentUser != null
       ? Status.authenticated : Status.unauthenticated {
-    _auth.authStateChanges().listen(_onAuthStateChanged);
+    _auth.authStateChanges().listen(_onAuthStateChanged); // 스트림을 반환
   }
 
+  // 인증 상태가 변할때마다 호출되는 함수
   Future<void> _onAuthStateChanged(User? firebaseUser) async {
     if (firebaseUser == null) {
       _status = Status.unauthenticated;
@@ -80,8 +81,10 @@ class UserProvider extends ChangeNotifier {
       return e.toString();
     }
   }
+
   Future<void> signOut() async {
     await _auth.signOut();
+    _user = null;
     _status = Status.unauthenticated;
     notifyListeners();
   }

@@ -11,12 +11,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(
-    ChangeNotifierProvider(
-      create: (context) => UserProvider(),
-      child: const MyApp(),
-    ),
-  );
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -24,28 +19,64 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'First Snow',
-      home: Consumer<UserProvider>(
-        builder: (context, user, child) => user.status == Status.authenticated
-          ? Scaffold(
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('로그인 성공'),
-                ElevatedButton(
-                  onPressed: () async {
-                    await context.read<UserProvider>().signOut();
-                  },
-                  child: const Text('로그아웃'),
-                ),
-              ],
-            ),
-          ),
+    return ChangeNotifierProvider(
+      create: (context) => UserProvider(),
+      child: MaterialApp(
+        title: 'First Snow',
+        home: Consumer<UserProvider>(
+          builder: (context, user, child) {
+            return user.status == Status.authenticated
+              ? const HomeScreen()
+              : const SignInView();
+          },
         )
-          : const signinView(),
-      )
+      ),
     );
   }
 }
+
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Home'),
+        actions: [
+          ElevatedButton.icon(
+            icon: Icon(Icons.logout),
+            label: const Text('Logout'),
+            onPressed: () async {
+              await userProvider.signOut();
+            },
+          )
+        ],
+      ),
+      body: Center(
+        child: Text("Welcome, ${userProvider.user?.email ?? 'Guest'}"), // user가 없으면 Guest로 표시
+      ),
+
+    );
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
