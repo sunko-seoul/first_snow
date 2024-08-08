@@ -1,3 +1,4 @@
+import 'package:first_snow/test.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -6,13 +7,25 @@ import 'package:first_snow/component/main_bottom_nav_bar.dart';
 import 'package:first_snow/view/main_screen.dart';
 import 'package:first_snow/provider/bottom_nav_provider.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({
     Key? key,
   }) : super(key: key);
 
   @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    Provider.of<TestProvider>(context).init(this, 2);
+
     final double screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(

@@ -1,3 +1,5 @@
+import 'package:first_snow/provider/tab_controller_provider.dart';
+import 'package:first_snow/test.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -8,6 +10,7 @@ import 'package:first_snow/provider/card_select_provider.dart';
 import 'package:first_snow/provider/setting_provider.dart';
 import 'package:first_snow/provider/profile_oval_image_provider.dart';
 import 'package:first_snow/view/home_screen.dart';
+import 'package:first_snow/test.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

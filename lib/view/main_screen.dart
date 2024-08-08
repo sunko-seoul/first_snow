@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:first_snow/view/search_screen.dart';
 import 'package:first_snow/view/setting_screen.dart';
+import 'package:first_snow/view/send_recv_screen.dart';
+import 'package:first_snow/test.dart';
 
 Widget mainScreen(int selectedIndex) {
   switch (selectedIndex) {
     case 0:
       return SearchScreen();
     case 1:
-      return dummyScreen(2);
+      return TestScreen();
     case 2:
-      return dummyScreen(3);
+      return SendRecvScreen();
     case 3:
       return dummyScreen(4);
     case 4:
