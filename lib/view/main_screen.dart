@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:first_snow/view/search_screen.dart';
+import 'package:first_snow/view/setting_screen.dart';
 
 Widget mainScreen(int selectedIndex) {
   switch (selectedIndex) {
@@ -12,7 +13,7 @@ Widget mainScreen(int selectedIndex) {
     case 3:
       return dummyScreen(4);
     case 4:
-      return dummyScreen(5);
+      return SettingsPage();
     default:
       return dummyScreen(1);
   }

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'setting_model.dart';
+import 'package:first_snow/const/color.dart';
 import 'dart:ui';
 
 class SettingsViewModel extends ChangeNotifier {
-  final Settings _settings = Settings();
+  bool _notificationsEnabled = true;
 
-  Settings get settings => _settings;
+  bool get notificationsEnabled => _notificationsEnabled;
 
   void toggleNotifications() {
-    _settings.notificationsEnabled = !_settings.notificationsEnabled;
+    _notificationsEnabled = !_notificationsEnabled;
     notifyListeners();
   }
 
@@ -23,13 +23,13 @@ class SettingsViewModel extends ChangeNotifier {
           Expanded(
             child: TextButton(
               style: ButtonStyle(
-                overlayColor: WidgetStateProperty.all(Colors.blue[50]!),
+                overlayColor: WidgetStateProperty.all(PRIMARY_COLOR_10),
                 shape: WidgetStateProperty.all(
                   RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                foregroundColor: WidgetStateProperty.all(Colors.blue[300]),
+                foregroundColor: WidgetStateProperty.all(PRIMARY_COLOR_80),
                 backgroundColor: WidgetStateProperty.all(Colors.transparent),
               ),
               onPressed: () {
@@ -42,21 +42,15 @@ class SettingsViewModel extends ChangeNotifier {
           ),
           SizedBox(width: 36),
           Expanded(
-            child: OutlinedButton(
+            child: TextButton(
               style: ButtonStyle(
-                overlayColor: WidgetStateProperty.all(Colors.blue[50]!),
+                overlayColor: WidgetStateProperty.all(PRIMARY_COLOR_10),
                 shape: WidgetStateProperty.all(
                   RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                side: WidgetStateProperty.all(
-                  BorderSide(
-                    width: 2,
-                    color: Colors.blue[300]!,
-                  ),
-                ),
-                foregroundColor: WidgetStateProperty.all(Colors.blue[300]),
+                foregroundColor: WidgetStateProperty.all(PRIMARY_COLOR_80),
                 backgroundColor: WidgetStateProperty.all(Colors.transparent),
               ),
               onPressed: () {
@@ -64,9 +58,6 @@ class SettingsViewModel extends ChangeNotifier {
               },
               child: Text(
                 '로그아웃',
-                style: TextStyle(
-                  color: Colors.blue[300],
-                ),
               ),
             ),
           ),
@@ -83,21 +74,15 @@ class SettingsViewModel extends ChangeNotifier {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
-            child: OutlinedButton(
+            child: TextButton(
               style: ButtonStyle(
-                overlayColor: WidgetStateProperty.all(Colors.blue[50]!),
+                overlayColor: WidgetStateProperty.all(PRIMARY_COLOR_10),
                 shape: WidgetStateProperty.all(
                   RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                side: WidgetStateProperty.all(
-                  BorderSide(
-                    width: 2,
-                    color: Colors.blue[300]!,
-                  ),
-                ),
-                foregroundColor: WidgetStateProperty.all(Colors.blue[300]),
+                foregroundColor: WidgetStateProperty.all(PRIMARY_COLOR_80),
                 backgroundColor: WidgetStateProperty.all(Colors.transparent),
               ),
               onPressed: () {
@@ -108,10 +93,10 @@ class SettingsViewModel extends ChangeNotifier {
           ),
           SizedBox(width: 36),
           Expanded(
-            child: FilledButton(
+            child: TextButton(
               style: ButtonStyle(
-                overlayColor: WidgetStateProperty.all(Colors.red[400]!),
-                backgroundColor: WidgetStateProperty.all(Colors.red[300]),
+                overlayColor: WidgetStateProperty.all(Colors.red[100]!),
+                foregroundColor: WidgetStateProperty.all(Colors.red[500]),
                 shape: WidgetStateProperty.all(
                   RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
@@ -123,9 +108,6 @@ class SettingsViewModel extends ChangeNotifier {
               },
               child: Text(
                 '탈퇴하기',
-                style: TextStyle(
-                  color: Colors.white,
-                ),
               ),
             ),
           ),
