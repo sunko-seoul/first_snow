@@ -1,6 +1,8 @@
+import 'package:first_snow/provider/card_select_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:first_snow/component/main_app_bar.dart';
 import 'package:first_snow/component/profile_oval_image.dart';
+import 'package:provider/provider.dart';
 
 class ProfileEditScreen extends StatelessWidget {
   final FocusNode _focusNode = FocusNode();
@@ -10,7 +12,7 @@ class ProfileEditScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MainAppBar(
-        showBackButton: true,
+        selectedIndex: Provider.of<CardSelectProvider>(context).selectedIndex,
       ),
       body: SingleChildScrollView(
         controller: _scrollController,

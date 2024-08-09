@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:first_snow/const/color.dart';
 import 'package:first_snow/view/near_screen.dart';
 import 'package:first_snow/provider/user_list_provider.dart';
-import 'package:first_snow/component/user_card.dart';
+import 'package:first_snow/component/user_match_card.dart';
 import 'package:first_snow/provider/tab_controller_provider.dart';
 
 class ConnectScreen extends StatelessWidget {
@@ -24,12 +24,12 @@ GestureDetector connectScreen(Set<int> userList) {
         sliver: SliverGrid(
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 1,
-            childAspectRatio: 1.5,
-            mainAxisSpacing: 5,
+            childAspectRatio: 1.75,
+            mainAxisSpacing: 10,
           ),
           delegate: SliverChildBuilderDelegate(
             (BuildContext context, int index) {
-              return UserCard(
+              return UserMatchCard(
                 userId: userList.toList()[index],
               );
             },

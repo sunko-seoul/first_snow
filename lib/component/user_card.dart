@@ -1,10 +1,12 @@
 import 'package:first_snow/const/color.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:provider/provider.dart';
 import 'package:first_snow/provider/user_list_provider.dart';
 import 'package:first_snow/provider/card_select_provider.dart';
+import 'package:first_snow/component/custom_dropdown_button.dart';
 
 class UserCard extends StatelessWidget {
   final int userId;
@@ -16,7 +18,7 @@ class UserCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return userCardFront(userId);
+    return userCardFront(userId, context);
   }
 }
 
@@ -68,21 +70,134 @@ class _UserCardFlipState extends State<UserCardFlip> {
               child: _isBack
                   ? userCardBack(widget.userId, widget.pageName,
                       widget.acceptStr, widget.denyStr)
-                  : userCardFront(widget.userId));
+                  : userCardFront(widget.userId, context));
         },
       ),
     );
   }
 }
 
-Widget userCardFront(int userId) {
-  return Container(
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(10.0),
-      image: DecorationImage(
-        image: AssetImage('asset/user/user_$userId.jpg'),
-        fit: BoxFit.cover,
-      ),
+Widget userCardFront(int userId, BuildContext context) {
+  return ClipRRect(
+    borderRadius: BorderRadius.circular(10.0),
+    child: Stack(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10.0),
+            image: DecorationImage(
+              image: AssetImage('asset/user/user_$userId.jpg'),
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+        Positioned(
+          top: 0,
+          right: 0,
+          child: Container(
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.3),
+                  spreadRadius: 0,
+                  blurRadius: 20,
+                  offset: Offset(0, 0), // 그림자의 위치 조정
+                ),
+              ],
+            ),
+            child: PopupMenuButton<int>(
+              icon: Icon(Icons.more_vert, color: GREY_COLOR_10),
+              onSelected: (int result) {
+                print('result: $result');
+                if (result == 1) {
+                  showDialog(
+                      context: context,
+                      barrierColor: Colors.grey.withOpacity(0.5),
+                      builder: (BuildContext context) {
+                        return BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                          child: AlertDialog(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            title: Text('신고하기'),
+                            content: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text('신고사유를 선택하세요:'),
+                                CustomDropdownButton(
+                                    reasonList: ['스팸', '부적절한 내용', '기타']),
+                              ],
+                            ),
+                            actions: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: TextButton(
+                                      style: ButtonStyle(
+                                        overlayColor: WidgetStateProperty.all(
+                                            PRIMARY_COLOR_10),
+                                        shape: WidgetStateProperty.all(
+                                          RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                        ),
+                                        foregroundColor:
+                                            WidgetStateProperty.all(
+                                                PRIMARY_COLOR_80),
+                                        backgroundColor:
+                                            WidgetStateProperty.all(
+                                                Colors.transparent),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text('취소'),
+                                    ),
+                                  ),
+                                  SizedBox(width: 36),
+                                  Expanded(
+                                    child: TextButton(
+                                      style: ButtonStyle(
+                                        overlayColor: WidgetStateProperty.all(
+                                            Colors.red[100]!),
+                                        foregroundColor:
+                                            WidgetStateProperty.all(
+                                                Colors.red[500]),
+                                        shape: WidgetStateProperty.all(
+                                          RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                        ),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text(
+                                        '확인',
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        );
+                      });
+                }
+              },
+              itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
+                const PopupMenuItem(value: 1, child: Text('신고하기')),
+              ],
+            ),
+          ),
+        ),
+      ],
     ),
   );
 }
