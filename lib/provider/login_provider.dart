@@ -27,6 +27,7 @@ class LoginProvider extends ChangeNotifier {
 
   // 인증 상태가 변할때마다 호출되는 함수
   Future<void> _onAuthStateChanged(User? firebaseUser) async {
+    print(firebaseUser);
     if (firebaseUser == null) {
       _status = Status.unauthenticated;
     } else {
