@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:first_snow/const/color.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:first_snow/component/login_text_field.dart';
-import 'package:first_snow/provider/user_provider.dart';
+import 'package:first_snow/provider/login_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:first_snow/view/signin_view.dart';
 
@@ -140,7 +140,7 @@ class _SignupViewState extends State<SignupView> {
   }
   void onRegisterPress() async {
     if (saveAndValidateForm()) {
-      String text = await context.read<UserProvider>().signUp(email, password);
+      String text = await context.read<LoginProvider>().signUp(email, password);
       if (text == 'Success') {
         Navigator.of(context).pop();
       } else {

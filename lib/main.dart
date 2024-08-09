@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:first_snow/view/signin_view.dart';
-import 'package:first_snow/provider/user_provider.dart';
+import 'package:first_snow/provider/login_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:first_snow/view/setup_view.dart';
+import 'package:first_snow/provider/user_provider.dart';
 
 
 void main() async {
@@ -19,14 +21,21 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => UserProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => LoginProvider(),
+        ),
+        ChangeNotifierProvider(
+            create: (context) => UserProvider()
+        ),
+      ],
       child: MaterialApp(
         title: 'First Snow',
-        home: Consumer<UserProvider>(
+        home: Consumer<LoginProvider>(
           builder: (context, user, child) {
             return user.status == Status.authenticated
-              ? const HomeScreen()
+              ? const SetupView()
               : const SignInView();
           },
         )
@@ -40,7 +49,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(context);
+    final userProvider = Provider.of<LoginProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home'),
