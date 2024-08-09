@@ -11,6 +11,7 @@ class ProfileEditScreen extends StatelessWidget {
     return Scaffold(
       appBar: MainAppBar(
         showBackButton: true,
+        selectedIndex: 0,
       ),
       body: SingleChildScrollView(
         controller: _scrollController,

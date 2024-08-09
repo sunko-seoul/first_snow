@@ -30,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
     return Scaffold(
       appBar: MainAppBar(
+        showBackButton: false,
         selectedIndex: Provider.of<BottomNavProvider>(context).selectedIndex,
       ),
       body: Consumer<BottomNavProvider>(

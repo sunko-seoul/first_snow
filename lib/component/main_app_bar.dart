@@ -5,11 +5,13 @@ import 'package:first_snow/const/color.dart';
 import 'package:first_snow/component/send_recv_tab_bar.dart';
 
 class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final bool showBackButton;
+
   final int selectedIndex;
   MainAppBar({
     Key? key,
     required this.selectedIndex,
-
+    required this.showBackButton,
   }) : super(key: key);
 
   @override
@@ -17,7 +19,15 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
     // int selectedIndex = Provider.of<BottomNavProvider>(context).selectedIndex;
     return AppBar(
       backgroundColor: WHITE_COLOR,
-      title: Row(
+      leading: showBackButton
+          ? IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            )
+          : null,
+      flexibleSpace: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Align(

@@ -21,6 +21,8 @@ void main() async {
       ChangeNotifierProvider(create: (context) => BottomNavProvider()),
       ChangeNotifierProvider(create: (context) => CardSelectProvider()),
       ChangeNotifierProvider(create: (context) => SettingsViewModel()),
+      ChangeNotifierProvider(create: (context) => TabControllerProvider()),
+      ChangeNotifierProvider(create: (context) => UserListProvider()),
       ChangeNotifierProvider(create: (_) => ProfileOvalImageProvider()),
     ], child: MyApp()),
   );
