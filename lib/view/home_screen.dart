@@ -1,4 +1,4 @@
-import 'package:first_snow/test.dart';
+import 'package:first_snow/provider/tab_controller_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -24,12 +24,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<TestProvider>(context).init(this, 2);
+    Provider.of<TabControllerProvider>(context).init(this, 2);
 
     final double screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      appBar: MainAppBar(),
+      appBar: MainAppBar(
+        selectedIndex: Provider.of<BottomNavProvider>(context).selectedIndex,
+      ),
       body: Consumer<BottomNavProvider>(
         builder: (context, bottomNavProvider, child) {
           return mainScreen(bottomNavProvider.selectedIndex);

@@ -1,34 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:provider/provider.dart';
 
 import 'package:first_snow/const/color.dart';
-import 'package:first_snow/component/main_bottom_nav_bar.dart';
 import 'package:first_snow/component/send_recv_tab_bar.dart';
-import 'package:first_snow/provider/bottom_nav_provider.dart';
 
 class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final bool showBackButton;
-
+  final int selectedIndex;
   MainAppBar({
     Key? key,
-    this.showBackButton = false,
+    required this.selectedIndex,
+
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    // int selectedIndex = Provider.of<BottomNavProvider>(context).selectedIndex;
     return AppBar(
       backgroundColor: WHITE_COLOR,
-      leading: showBackButton
-          ? IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            )
-          : null,
-      title: Text(""),
-      flexibleSpace: Row(
+      title: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Align(
@@ -41,22 +30,19 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ],
       ),
-    ];
-    return AppBar(
-      backgroundColor: WHITE_COLOR,
-      title: Column(
-        children: children,
-      ),
       bottom: selectedIndex == 1
           ? PreferredSize(
               preferredSize: Size.fromHeight(48.0),
-              child: Text(
-                '오늘 스쳐지나간 사람들',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ))
+              child: Container(
+                  height: 48.0,
+                  alignment: Alignment.center,
+                  child: Text(
+                    '오늘 스쳐지나간 사람들',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )))
           : selectedIndex == 2
               ? PreferredSize(
                   preferredSize: Size.fromHeight(48.0),
@@ -71,5 +57,6 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => Size.fromHeight(
+      56.0 + (selectedIndex == 1 || selectedIndex == 2 ? 48.0 : 0));
 }
