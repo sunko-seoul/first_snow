@@ -1,9 +1,8 @@
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first_snow/component/login_text_field.dart';
 import 'package:first_snow/const/color.dart';
-import 'package:first_snow/provider/user_provider.dart';
+import 'package:first_snow/provider/login_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:first_snow/view/signup_view.dart';
 import 'package:first_snow/view/password_reset_dialog.dart';
@@ -137,7 +136,7 @@ class _SignInViewState extends State<SignInView> {
 
   void onLoginPress() async {
     if (saveAndValidateForm()) {
-      String text = await context.read<UserProvider>().signIn(email, password);
+      String text = await context.read<LoginProvider>().signIn(email, password);
       if (text != 'Success') {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
