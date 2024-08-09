@@ -9,6 +9,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   MainAppBar({
     Key? key,
     required this.selectedIndex,
+
   }) : super(key: key);
 
   @override
@@ -19,10 +20,13 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SvgPicture.asset(
-            'asset/img/logo.svg',
-            height: 32,
-            semanticsLabel: 'main_logo',
+          Align(
+            alignment: Alignment.center,
+            child: SvgPicture.asset(
+              'asset/img/logo.svg',
+              height: 32,
+              semanticsLabel: 'main_logo',
+            ),
           ),
         ],
       ),
@@ -47,6 +51,8 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
               : null,
       elevation: 4.0,
       shadowColor: BLACK_COLOR,
+      centerTitle: true,
+      automaticallyImplyLeading: false,
     );
   }
 
