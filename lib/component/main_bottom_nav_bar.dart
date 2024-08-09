@@ -32,8 +32,8 @@ class MainBottomNavBar extends StatelessWidget {
       ]),
       child: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
+        showSelectedLabels: true,
+        showUnselectedLabels: true,
         currentIndex: index,
         onTap: onTap,
         elevation: 0,

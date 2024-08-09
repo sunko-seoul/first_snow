@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
-class TabControllerProvider with ChangeNotifier {
+class TabControllerProvider extends ChangeNotifier {
   late TabController _tabController;
 
-  TabControllerProvider(TickerProvider vsync) {
-    _tabController = TabController(length: 2, vsync: vsync);
+  void init(TickerProvider vsync, int length) {
+    _tabController = TabController(length: length, vsync: vsync);
   }
 
   TabController get tabController => _tabController;
 
+  @override
   void dispose() {
     _tabController.dispose();
     super.dispose();

@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:first_snow/view/search_screen.dart';
+import 'package:first_snow/view/near_screen.dart';
+import 'package:first_snow/view/alarm_screen.dart';
 import 'package:first_snow/view/send_recv_screen.dart';
-import 'package:first_snow/test.dart';
+import 'package:first_snow/view/connect_screen.dart';
+import 'package:first_snow/provider/tab_controller_provider.dart';
 
 Widget mainScreen(int selectedIndex) {
   switch (selectedIndex) {
     case 0:
-      return SearchScreen();
+      return NearScreen();
     case 1:
-      return TestScreen();
+      return AlarmScreen();
     case 2:
       return SendRecvScreen();
     case 3:
-      return dummyScreen(4);
+      return ConnectScreen();
     case 4:
       return dummyScreen(5);
     default:
-      return dummyScreen(1);
+      return NearScreen();
   }
 }
 
