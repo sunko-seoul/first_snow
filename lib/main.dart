@@ -4,8 +4,7 @@ import 'firebase_options.dart';
 import 'package:first_snow/view/signin_view.dart';
 import 'package:first_snow/provider/login_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:first_snow/view/profile_setup_view.dart';
-import 'package:first_snow/view/image_setup_view.dart';
+import 'package:first_snow/view/setup_view.dart';
 import 'package:first_snow/provider/user_provider.dart';
 
 
@@ -36,7 +35,7 @@ class MyApp extends StatelessWidget {
         home: Consumer<LoginProvider>(
           builder: (context, user, child) {
             return user.status == Status.authenticated
-              ? const ImageSetupView()
+              ? const SetupView()
               : const SignInView();
           },
         )

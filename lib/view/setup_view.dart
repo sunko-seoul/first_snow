@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:first_snow/const/color.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'package:first_snow/view/profile_setup_view.dart';
 import 'package:first_snow/provider/login_provider.dart';
 import 'package:first_snow/provider/user_provider.dart';
 import 'package:provider/provider.dart';
@@ -10,14 +9,14 @@ import 'package:first_snow/model/user_model.dart';
 import 'package:flutter/services.dart';
 
 // TODO: 성별
-class ImageSetupView extends StatefulWidget {
-  const ImageSetupView({super.key});
+class SetupView extends StatefulWidget {
+  const SetupView({super.key});
 
   @override
-  State<ImageSetupView> createState() => _ImageSetupViewState();
+  State<SetupView> createState() => _SetupViewState();
 }
 
-class _ImageSetupViewState extends State<ImageSetupView> {
+class _SetupViewState extends State<SetupView> {
   final _name = TextEditingController();
   final _age = TextEditingController();
   final _instagramId = TextEditingController();
@@ -57,7 +56,6 @@ class _ImageSetupViewState extends State<ImageSetupView> {
         profileImage = pickedImage;
       });
     }
-    print(profileImage!.path);
   }
 
   @override
