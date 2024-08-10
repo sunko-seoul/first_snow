@@ -1,6 +1,7 @@
 import 'package:first_snow/provider/tab_controller_provider.dart';
 import 'package:first_snow/provider/user_list_provider.dart';
 import 'package:first_snow/view/signin_view.dart';
+import 'package:first_snow/view/signup_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -47,7 +48,7 @@ class MyApp extends StatelessWidget {
           } else if (user.status == Status.profileCompleted) {
             return HomeScreen();
           } else {
-            return SignInView();
+            return SignUpView();
           }
         },
       )

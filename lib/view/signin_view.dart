@@ -81,13 +81,7 @@ class _SignInViewState extends State<SignInView> {
                 children: [
                   Text('계정이 없으신가요?'),
                   TextButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => SignupView(),
-                        ),
-                      );
-                    },
+                    onPressed: () => Navigator.of(context).pop(),
                     child: Text(
                         '가입하기',
                         style: TextStyle(

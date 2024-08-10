@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:first_snow/const/color.dart';
 import 'dart:ui';
 import 'package:first_snow/component/pop_up_message.dart';
+import 'package:first_snow/provider/login_provider.dart';
+import 'package:provider/provider.dart';
 
 class SettingsViewModel extends ChangeNotifier {
   bool _notificationsEnabled = true;
@@ -55,6 +57,7 @@ class SettingsViewModel extends ChangeNotifier {
               ),
               onPressed: () {
                 Navigator.pop(context);
+                Provider.of<LoginProvider>(context, listen: false).signOut();
               },
               child: Text(
                 '로그아웃',
