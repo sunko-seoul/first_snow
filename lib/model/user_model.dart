@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class UserModel {
   final String? uid;
   String? email;
@@ -37,7 +39,11 @@ class UserModel {
       age: json['age'],
       instagramId: json['instagramId'],
       profileImagePath: json['profileImagePath'],
-      createdAt: json['createdAt'] == null ? null : DateTime.parse(json['createdAt']),
+      createdAt: json['createdAt'] is Timestamp
+          ? (json['createdAt'] as Timestamp).toDate() // Convert Timestamp to DateTime
+          : json['createdAt'] != null
+          ? DateTime.parse(json['createdAt'])
+          : null,
     );
   }
 }
