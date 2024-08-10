@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import 'package:first_snow/const/color.dart';
 import 'dart:ui';
+import 'package:first_snow/component/pop_up_message.dart';
 
 class SettingsViewModel extends ChangeNotifier {
   bool _notificationsEnabled = true;
@@ -14,7 +14,7 @@ class SettingsViewModel extends ChangeNotifier {
   }
 
   void showLogoutPopup(BuildContext context) {
-    _showPopup(
+    PopUpMessage(
       context,
       '정말 로그아웃하시겠습니까?',
       Row(
@@ -67,7 +67,7 @@ class SettingsViewModel extends ChangeNotifier {
   }
 
   void showDeleteAccountPopup(BuildContext context) {
-    _showPopup(
+    PopUpMessage(
       context,
       '정말 회원탈퇴하시겠습니까?',
       Row(
@@ -115,32 +115,4 @@ class SettingsViewModel extends ChangeNotifier {
       ),
     );
   }
-}
-
-void _showPopup(BuildContext context, String content, Widget actions) {
-  showDialog(
-    context: context,
-    barrierColor: Colors.grey.withOpacity(0.5),
-    builder: (BuildContext context) {
-      return BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-        child: AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          content: Padding(
-            padding: EdgeInsets.fromLTRB(0, 24, 0, 0),
-            child: Text(
-              content,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-          ),
-          actions: [actions],
-        ),
-      );
-    },
-  );
 }
