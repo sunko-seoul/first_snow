@@ -29,7 +29,7 @@ class UserCard extends StatelessWidget {
             ),
           );
         },
-        child: userCardFront(userId));
+        child: userCardFront(userId, context));
   }
 }
 

@@ -6,14 +6,14 @@ import 'package:first_snow/provider/login_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:first_snow/view/signin_view.dart';
 
-class SignupView extends StatefulWidget {
-  const SignupView({super.key});
+class SignUpView extends StatefulWidget {
+  const SignUpView({super.key});
 
   @override
-  State<SignupView> createState() => _SignupViewState();
+  State<SignUpView> createState() => _SignUpViewState();
 }
 
-class _SignupViewState extends State<SignupView> {
+class _SignUpViewState extends State<SignUpView> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String email = '';
   String password = '';
@@ -111,7 +111,11 @@ class _SignupViewState extends State<SignupView> {
                   Text('이미 계정이 있으신가요?'),
                   TextButton(
                     onPressed: () {
-                      Navigator.of(context).pop();
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => SignInView(),
+                        ),
+                      );
                     },
                     child: Text(
                       '로그인',
