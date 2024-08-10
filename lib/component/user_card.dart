@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:first_snow/view/profile_screen.dart';
+
 import 'package:provider/provider.dart';
 import 'package:first_snow/provider/user_list_provider.dart';
 import 'package:first_snow/provider/card_select_provider.dart';
@@ -18,7 +20,16 @@ class UserCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return userCardFront(userId, context);
+    return GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProfileScreen(userId: userId),
+            ),
+          );
+        },
+        child: userCardFront(userId));
   }
 }
 

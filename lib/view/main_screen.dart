@@ -4,7 +4,7 @@ import 'package:first_snow/view/alarm_screen.dart';
 import 'package:first_snow/view/setting_screen.dart';
 import 'package:first_snow/view/send_recv_screen.dart';
 import 'package:first_snow/view/connect_screen.dart';
-import 'package:first_snow/provider/tab_controller_provider.dart';
+import 'package:first_snow/view/profile_screen.dart';
 
 Widget mainScreen(int selectedIndex) {
   switch (selectedIndex) {
