@@ -12,6 +12,7 @@ class ProfileEditScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MainAppBar(
+        showBackButton: true,
         selectedIndex: Provider.of<CardSelectProvider>(context).selectedIndex,
       ),
       body: SingleChildScrollView(

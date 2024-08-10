@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:first_snow/const/color.dart';
 import 'package:image_picker/image_picker.dart';
@@ -7,6 +9,7 @@ import 'package:first_snow/provider/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:first_snow/model/user_model.dart';
 import 'package:flutter/services.dart';
+import 'package:first_snow/view/home_screen.dart';
 
 // TODO: 성별
 class SetupView extends StatefulWidget {
@@ -245,6 +248,12 @@ class _SetupViewState extends State<SetupView> {
                                 createdAt: DateTime.now(),
                               );
                               userProvider.createUser(userInstance);
+                              if (!mounted) return;
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                  builder: (context) => HomeScreen(),
+                                ),
+                              );
                             } : null,
                             child: Text(
                               '다음으로',
