@@ -1,5 +1,7 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 
 enum Status {
@@ -7,10 +9,12 @@ enum Status {
   authenticated,
   authenticating,
   unauthenticated,
+  profileCompleted,
 }
 
 class LoginProvider extends ChangeNotifier {
   final FirebaseAuth _auth;
+  final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
   Status _status = Status.uninitialized;
   User? _user;
 
@@ -19,20 +23,36 @@ class LoginProvider extends ChangeNotifier {
 
   LoginProvider()
    : _auth = FirebaseAuth.instance
-   , _user = FirebaseAuth.instance.currentUser
-   , _status = FirebaseAuth.instance.currentUser != null
-      ? Status.authenticated : Status.unauthenticated {
+   , _user = FirebaseAuth.instance.currentUser {
+    if (_user == null) {
+      _status = Status.unauthenticated;
+    } else {
+      setUserState();
+    }
     _auth.authStateChanges().listen(_onAuthStateChanged); // 스트림을 반환
+  }
+
+  Future<void> setUserState() async {
+    final userDoc = await _fireStore.collection('users').doc(_user!.uid).get();
+    if (!userDoc.exists) {
+      _status = Status.authenticated;
+    } else {
+      _status = Status.profileCompleted;
+    }
   }
 
   // 인증 상태가 변할때마다 호출되는 함수
   Future<void> _onAuthStateChanged(User? firebaseUser) async {
-    print(firebaseUser);
     if (firebaseUser == null) {
       _status = Status.unauthenticated;
     } else {
+      final userDoc = await _fireStore.collection('users').doc(firebaseUser.uid).get();
+      if (!userDoc.exists) {
+        _status = Status.authenticated;
+      } else {
+        _status = Status.profileCompleted;
+      }
       _user = firebaseUser;
-      _status = Status.authenticated;
     }
     notifyListeners();
   }
