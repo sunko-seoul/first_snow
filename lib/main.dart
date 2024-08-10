@@ -4,6 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:first_snow/view/signin_view.dart';
+import 'package:first_snow/provider/login_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:first_snow/view/setup_view.dart';
+import 'package:first_snow/provider/user_provider.dart';
 
 import 'package:first_snow/provider/bottom_nav_provider.dart';
 import 'package:first_snow/provider/card_select_provider.dart';
@@ -29,10 +34,49 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: HomeScreen(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => LoginProvider(),
+        ),
+        ChangeNotifierProvider(
+            create: (context) => UserProvider()
+        ),
+      ],
+      child: MaterialApp(
+        title: 'First Snow',
+        home: Consumer<LoginProvider>(
+          builder: (context, user, child) {
+            return user.status == Status.authenticated
+              ? const SetupView()
+              : const SignInView();
+          },
+        )
+      ),
     );
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
