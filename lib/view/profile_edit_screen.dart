@@ -6,17 +6,33 @@ import 'package:provider/provider.dart';
 import 'package:first_snow/provider/user_provider.dart';
 import 'package:first_snow/model/user_model.dart';
 import 'package:first_snow/provider/login_provider.dart';
+import 'package:first_snow/provider/profile_oval_image_provider.dart';
+import 'dart:io';
 
-class ProfileEditScreen extends StatelessWidget {
+
+
+class ProfileEditScreen extends StatefulWidget {
+  @override
+  State<ProfileEditScreen> createState() => _ProfileEditScreenState();
+}
+
+class _ProfileEditScreenState extends State<ProfileEditScreen> {
   final FocusNode _focusNode = FocusNode();
-
+  bool _isButtonDisabled = false;
   final ScrollController _scrollController = ScrollController();
-  final _nameController = TextEditingController(text: "김여자");
-  final _ageController = TextEditingController(text: "20");
-  final _instagramIdController = TextEditingController(text: "_yeojakim");
+  final _nameController = TextEditingController();
+  final _ageController = TextEditingController();
+  final _instagramIdController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    Future<UserModel?> currentUser = Provider.of<UserProvider>(context).getUser(Provider.of<LoginProvider>(context).user!.uid);
+    currentUser.then((value) {
+      _nameController.text = value!.name!;
+      _ageController.text = value.age.toString();
+      _instagramIdController.text = value.instagramId!;
+    });
+
     return Scaffold(
       appBar: MainAppBar(
         showBackButton: true,
@@ -34,20 +50,27 @@ class ProfileEditScreen extends StatelessWidget {
               ProfileEditItem(label: "나이", controller: _ageController), // TODO: 나이 숫자로 받아야 함
               ProfileEditItem(label: "인스타 아이디", controller: _instagramIdController),
               ElevatedButton(
-                  onPressed: (){
-                    // TODO: image upload
-                    UserModel user = UserModel(
-                      uid: Provider.of<LoginProvider>(context, listen: false).user!.uid,
-                      name: _nameController.text,
-                      age: int.parse(_ageController.text),
-                      instagramId: _instagramIdController.text,
-                      createdAt: DateTime.now(),
-                    );
-                    print(user);
-                    Provider.of<UserProvider>(context, listen: false).updateUser(user);
-                  },
-                  child: Text('저장하기')
-              ),
+                  // TODO: 버튼 업로드
+                  onPressed: _isButtonDisabled
+                      ? null
+                      : () {
+                          File? imageFile = Provider.of<ProfileOvalImageProvider>(context, listen: false).image;
+                          String? uid = Provider.of<LoginProvider>(context, listen: false).user!.uid;
+                          Future<String?> profileImagePath = Provider.of<UserProvider>(context, listen: false).updateImage(imageFile!, uid);
+                          profileImagePath.then((value) {;
+                            UserModel user = UserModel(
+                              uid: uid,
+                              name: _nameController.text,
+                              age: int.parse(_ageController.text),
+                              instagramId: _instagramIdController.text,
+                              profileImagePath: value,
+                              createdAt: DateTime.now(),
+                            );
+                            Provider.of<UserProvider>(context, listen: false).updateUser(user);
+                          });
+                       },
+                      child: Text('저장하기')
+                ),
             ],
           ),
         ),

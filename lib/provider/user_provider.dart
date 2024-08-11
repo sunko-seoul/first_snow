@@ -1,11 +1,9 @@
-import 'package:uuid/uuid.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:first_snow/model/user_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
-import 'package:provider/provider.dart';
-import 'login_provider.dart';
+
 
 class UserProvider with ChangeNotifier {
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
@@ -16,7 +14,11 @@ class UserProvider with ChangeNotifier {
     await _usersCollection.doc(user.uid).set(user.toJson());
   }
 
-  // TODO: 변경 안되는 값만 수정하도록 바꿔야 함
+  Future<UserModel> getUser(String uid) async {
+    DocumentSnapshot doc = await _usersCollection.doc(uid).get();
+    return UserModel.fromJson(doc.data() as Map<String, dynamic>);
+  }
+
   Future<void> updateUser(UserModel user) async {
     DocumentSnapshot? doc = await _usersCollection.doc(user.uid).get();
     Map<String, dynamic> userJson = user.toJson();
@@ -53,16 +55,15 @@ class UserProvider with ChangeNotifier {
   }
 
   // TODO: json에 접근해서 수정해야 함
-  Future<String> updateImage(File image) async {
-    DocumentSnapshot userDoc = await _fireStore.collection('users').doc('uid').get();
+  Future<String> updateImage(File image, String? uid) async {
+    DocumentSnapshot userDoc = await _fireStore.collection('users').doc(uid).get();
     String? oldImageUrl = userDoc['profileImagePath'];
-
-    if (oldImageUrl != null) {
+    if (oldImageUrl != "" || oldImageUrl != null) {
       try {
-        await _storage.refFromURL(oldImageUrl).delete();
+        await _storage.refFromURL(oldImageUrl!).delete();
+        oldImageUrl = null;
       } catch (e) {
         print("Failed to delete old profile image: $e");
-        return '';
       }
     }
     return await uploadImage(image);
