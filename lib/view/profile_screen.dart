@@ -1,8 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first_snow/component/main_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:first_snow/component/pop_up_message.dart';
 import 'package:first_snow/const/color.dart';
+import 'package:first_snow/component/user_report_pop_up.dart';
+import 'dart:ui';
 
 class ProfileScreen extends StatelessWidget {
   final int userId;
@@ -52,9 +55,18 @@ class ProfileScreen extends StatelessWidget {
                       ),
                       GestureDetector(
                         onTap: () {
-                          ShowReportPopUp(context);
+                          showDialog(
+                              context: context,
+                              barrierColor: Colors.grey.withOpacity(0.5),
+                              builder: (BuildContext context) {
+                                return BackdropFilter(
+                                  filter:
+                                      ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                                  child: ReportPopUp(),
+                                );
+                              });
                         },
-                        child: Icon(Icons.warning_amber,
+                        child: Icon(Icons.priority_high,
                             color: Colors.red, size: 32),
                       ),
                     ],

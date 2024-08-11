@@ -23,19 +23,27 @@ class _CustomStateDropdownButtonState extends State<CustomDropdownButton> {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButton<String>(
-      value: _selectedReason,
-      items: widget.reasonList.map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
-      onChanged: (String? newValue) {
-        setState(() {
-          _selectedReason = newValue!;
-        });
-      },
+    return Row(
+      children: [
+        Expanded(
+          child: DropdownButton<String>(
+            value: _selectedReason,
+            isExpanded: true,
+            items:
+                widget.reasonList.map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+            onChanged: (String? newValue) {
+              setState(() {
+                _selectedReason = newValue!;
+              });
+            },
+          ),
+        ),
+      ],
     );
   }
 }
