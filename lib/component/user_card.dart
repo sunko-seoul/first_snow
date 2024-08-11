@@ -8,7 +8,7 @@ import 'package:first_snow/view/profile_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:first_snow/provider/user_list_provider.dart';
 import 'package:first_snow/provider/card_select_provider.dart';
-import 'package:first_snow/component/custom_dropdown_button.dart';
+import 'package:first_snow/component/user_report_pop_up.dart';
 
 class UserCard extends StatelessWidget {
   final int userId;
@@ -127,77 +127,7 @@ Widget userCardFront(int userId, BuildContext context) {
                       builder: (BuildContext context) {
                         return BackdropFilter(
                           filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                          child: AlertDialog(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            title: Text('신고하기'),
-                            content: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text('신고사유를 선택하세요:'),
-                                CustomDropdownButton(
-                                    reasonList: ['스팸', '부적절한 내용', '기타']),
-                              ],
-                            ),
-                            actions: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                    child: TextButton(
-                                      style: ButtonStyle(
-                                        overlayColor: WidgetStateProperty.all(
-                                            PRIMARY_COLOR_10),
-                                        shape: WidgetStateProperty.all(
-                                          RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                        ),
-                                        foregroundColor:
-                                            WidgetStateProperty.all(
-                                                PRIMARY_COLOR_80),
-                                        backgroundColor:
-                                            WidgetStateProperty.all(
-                                                Colors.transparent),
-                                      ),
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: Text('취소'),
-                                    ),
-                                  ),
-                                  SizedBox(width: 36),
-                                  Expanded(
-                                    child: TextButton(
-                                      style: ButtonStyle(
-                                        overlayColor: WidgetStateProperty.all(
-                                            Colors.red[100]!),
-                                        foregroundColor:
-                                            WidgetStateProperty.all(
-                                                Colors.red[500]),
-                                        shape: WidgetStateProperty.all(
-                                          RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                        ),
-                                      ),
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: Text(
-                                        '확인',
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+                          child: ReportPopUp(),
                         );
                       });
                 }
