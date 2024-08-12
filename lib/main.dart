@@ -1,6 +1,6 @@
+import 'package:first_snow/provider/client_user_provider.dart';
 import 'package:first_snow/provider/tab_controller_provider.dart';
 import 'package:first_snow/provider/user_list_provider.dart';
-import 'package:first_snow/view/signin_view.dart';
 import 'package:first_snow/view/signup_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -30,6 +30,7 @@ void main() async {
       ChangeNotifierProvider(create: (context) => TabControllerProvider()),
       ChangeNotifierProvider(create: (context) => UserListProvider()),
       ChangeNotifierProvider(create: (_) => ProfileOvalImageProvider()),
+      ChangeNotifierProvider(create: (context) => ClientUserProvider()),
     ], child: MyApp()),
   );
 }

@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:first_snow/const/color.dart';
 import 'package:image_picker/image_picker.dart';
@@ -239,8 +237,8 @@ class _SetupViewState extends State<SetupView> {
                             onPressed: _isButtonEnabled ? () async {
                               String? imagePath = await userProvider.uploadImage(File(profileImage!.path));
                               final userInstance = UserModel(
-                                uid: loginProvider.user!.uid,
-                                email: user!.email,
+                                uid: user!.uid,
+                                email: user.email,
                                 name: _name.text,
                                 age: int.tryParse(_age.text),
                                 instagramId: _instagramId.text,
