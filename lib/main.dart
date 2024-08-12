@@ -1,3 +1,4 @@
+import 'package:first_snow/provider/client_user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:provider/provider.dart';
@@ -32,6 +33,7 @@ void main() async {
       ChangeNotifierProvider(create: (context) => TabControllerProvider()),
       ChangeNotifierProvider(create: (context) => UserListProvider()),
       ChangeNotifierProvider(create: (_) => ProfileOvalImageProvider()),
+      ChangeNotifierProvider(create: (context) => ClientUserProvider()),
     ], child: MyApp()),
   );
 }

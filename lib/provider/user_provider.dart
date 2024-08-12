@@ -4,7 +4,6 @@ import 'package:first_snow/model/user_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
 
-
 class UserProvider with ChangeNotifier {
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
   final FirebaseStorage _storage = FirebaseStorage.instance;
@@ -54,7 +53,6 @@ class UserProvider with ChangeNotifier {
     }
   }
 
-  // TODO: json에 접근해서 수정해야 함
   Future<String> updateImage(File image, String? uid) async {
     DocumentSnapshot userDoc = await _fireStore.collection('users').doc(uid).get();
     String? oldImageUrl = userDoc['profileImagePath'];
@@ -62,8 +60,9 @@ class UserProvider with ChangeNotifier {
       try {
         await _storage.refFromURL(oldImageUrl!).delete();
         oldImageUrl = null;
+        print('delete OK!');
       } catch (e) {
-        print("Failed to delete old profile image: $e");
+        print("Failed to delete old profile image $oldImageUrl");
       }
     }
     return await uploadImage(image);
