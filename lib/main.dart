@@ -26,7 +26,7 @@ void main() async {
       ChangeNotifierProvider(create: (context) => UserProvider()),
       ChangeNotifierProvider(create: (context) => BottomNavProvider()),
       ChangeNotifierProvider(create: (context) => CardSelectProvider()),
-      ChangeNotifierProvider(create: (context) => SettingsViewModel()),
+      ChangeNotifierProvider(create: (context) => SettingProvider()),
       ChangeNotifierProvider(create: (context) => TabControllerProvider()),
       ChangeNotifierProvider(create: (context) => UserListProvider()),
       ChangeNotifierProvider(create: (_) => ProfileOvalImageProvider()),
@@ -40,38 +40,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'First Snow',
-      home: Consumer<LoginProvider>(
-        builder: (context, user, child) {
-          if (user.status == Status.authenticated) {
-            return SetupView();
-          } else if (user.status == Status.profileCompleted) {
-            return HomeScreen();
-          } else {
-            return SignUpView();
-          }
-        },
-      )
-    );
+        title: 'First Snow',
+        home: Consumer<LoginProvider>(
+          builder: (context, user, child) {
+            if (user.status == Status.authenticated) {
+              return SetupView();
+            } else if (user.status == Status.profileCompleted) {
+              return HomeScreen();
+            } else {
+              return SignUpView();
+            }
+          },
+        ));
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -10,7 +10,7 @@ import 'dart:math';
 class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final settingsViewModel = Provider.of<SettingsViewModel>(context);
+    final settingProvider = Provider.of<SettingProvider>(context);
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 24),
@@ -58,11 +58,11 @@ class SettingsPage extends StatelessWidget {
               ),
               SwitchListTile(
                 title: Text('푸시 알림', style: TextStyle(fontSize: 20)),
-                value: settingsViewModel.notificationsEnabled,
+                value: settingProvider.notificationsEnabled,
                 activeColor: Colors.blue[100], // 색깔 추후 변경
                 contentPadding: EdgeInsets.zero,
                 onChanged: (value) {
-                  settingsViewModel.toggleNotifications();
+                  settingProvider.toggleNotifications();
                 },
               ),
               Container(
@@ -87,7 +87,7 @@ class SettingsPage extends StatelessWidget {
               ),
               listElement(
                 onTap: () {
-                  settingsViewModel.showLogoutPopup(context);
+                  settingProvider.showLogoutPopup(context);
                 },
                 text: Text('로그아웃',
                     style: TextStyle(
@@ -97,7 +97,7 @@ class SettingsPage extends StatelessWidget {
               ),
               listElement(
                 onTap: () {
-                  settingsViewModel.showDeleteAccountPopup(context);
+                  settingProvider.showDeleteAccountPopup(context);
                 },
                 text: Text('회원 탈퇴',
                     style: TextStyle(

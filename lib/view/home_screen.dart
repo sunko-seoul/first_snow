@@ -1,11 +1,16 @@
 import 'package:first_snow/provider/tab_controller_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'package:first_snow/component/main_app_bar.dart';
 import 'package:first_snow/component/main_bottom_nav_bar.dart';
 import 'package:first_snow/view/main_screen.dart';
 import 'package:first_snow/provider/bottom_nav_provider.dart';
+import 'package:first_snow/provider/notification_provider.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+// import 'package:firebase';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -17,9 +22,14 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
+  late NotificationProvider _notificationProvider;
+
   @override
   void initState() {
     super.initState();
+
+    _notificationProvider = NotificationProvider();
+    _notificationProvider.init();
   }
 
   @override
@@ -45,6 +55,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             index: bottomNavProvider.selectedIndex,
             onTap: (int index) {
               bottomNavProvider.updateIndex(index);
+              // _notificationProvider.showNotfication();
             },
           );
         },
