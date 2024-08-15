@@ -149,9 +149,7 @@ class _SignUpViewState extends State<SignUpView> {
   void onRegisterPress() async {
     if (saveAndValidateForm()) {
       String text = await context.read<LoginProvider>().signUp(email, password);
-      if (text == 'Success') {
-        Navigator.of(context).pop();
-      } else {
+      if (text != 'success') {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('회원가입에 실패했습니다.'),

@@ -9,13 +9,12 @@ import 'package:first_snow/provider/client_user_provider.dart';
 import 'package:first_snow/provider/user_provider.dart';
 import 'package:first_snow/provider/login_provider.dart';
 import 'package:first_snow/model/user_model.dart';
-import 'package:first_snow/provider/profile_oval_image_provider.dart';
-import 'dart:io';
+import 'package:first_snow/provider/user_list_provider.dart';
 
+
+// TODO: UserCard 파이어베이스 key, value로 수정하기, 새로고침시 리스트 초기화하기
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({
-    Key? key,
-  }) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -29,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     final clientUserProvider = Provider.of<ClientUserProvider>(context, listen: false);
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final user = Provider.of<LoginProvider>(context, listen: false).user;
+    final userListProvider = Provider.of<UserListProvider>(context, listen: false);
     Future<UserModel> userModel = userProvider.getUser(user!.uid);
     userModel.then((value) {
       clientUserProvider.setClientInfo(
@@ -38,7 +38,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           instagramId: value.instagramId!,
           profileImage: Image.network(value.profileImagePath!),
       );
+      userListProvider.uid = user.uid;
+    }).catchError((e) {
+      print("Error fetching user: $e");
+      // TODO: 어떤 에러처리?
     });
+    userListProvider.fetchNearUsers();
   }
 
   @override

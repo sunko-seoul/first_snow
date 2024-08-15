@@ -56,8 +56,8 @@ class SettingsViewModel extends ChangeNotifier {
                 backgroundColor: WidgetStateProperty.all(Colors.transparent),
               ),
               onPressed: () {
-                Navigator.pop(context);
                 Provider.of<LoginProvider>(context, listen: false).signOut();
+                Navigator.pop(context);
               },
               child: Text(
                 '로그아웃',
