@@ -2,37 +2,45 @@ import 'package:first_snow/view/profile_edit_screen.dart';
 import 'package:first_snow/provider/profile_oval_image_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:first_snow/provider/client_user_provider.dart';
 
 class ProfileOvalImage extends StatelessWidget {
   final double size;
 
-  ProfileOvalImage({required this.size});
+  ProfileOvalImage({
+    required this.size,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final clientUserProvider = Provider.of<ClientUserProvider>(context);
     return GestureDetector(
       onTap: () => context.read<ProfileOvalImageProvider>().pickImage(),
       child: Stack(children: [
         Consumer<ProfileOvalImageProvider>(builder: (context, provider, child) {
           return ClipOval(
-            child: provider.image != null
-                ? Image.file(
-                    provider.image!,
-                    width: size,
-                    height: size,
-                    fit: BoxFit.cover,
-                  )
-                : Image.asset(
-                    'asset/img/chuu.jpg',
-                    width: size,
-                    height: size,
-                    fit: BoxFit.cover,
-                  ),
+            child: provider.imageFile == null
+                ? SizedBox(
+                    width: 200.0,
+                    height: 200.0,
+                    child: FittedBox(
+                        fit: BoxFit.cover,
+                        child: clientUserProvider.profileImage,
+                    ),
+            )
+                : Image.file(
+                provider.imageFile!,
+                fit: BoxFit.cover,
+                width: size,
+                height: size,
+            ),
+
           );
         }),
         Positioned(
-          bottom: size! / 32,
-          right: size! / 32,
+          bottom: size / 32,
+          right: size / 32,
           child: Container(
             decoration: BoxDecoration(
               shape: BoxShape.circle,
@@ -46,13 +54,13 @@ class ProfileOvalImage extends StatelessWidget {
             ),
             child: ClipOval(
               child: Container(
-                width: size! / 4,
-                height: size! / 4,
+                width: size / 4,
+                height: size / 4,
                 color: Colors.white,
                 child: Icon(
                   Icons.camera_alt,
                   color: Colors.grey[400],
-                  size: size! * 3 / 16,
+                  size: size * 3 / 16,
                 ),
               ),
             ),
@@ -62,3 +70,4 @@ class ProfileOvalImage extends StatelessWidget {
     );
   }
 }
+
