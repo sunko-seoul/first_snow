@@ -1,3 +1,4 @@
+import 'package:first_snow/provider/card_select_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:first_snow/provider/tab_controller_provider.dart';

@@ -14,14 +14,14 @@ class AlarmScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<CardSelectProvider>(
       builder: (context, cardSelectProvider, child) {
-        void _onTap(int index) {
+        void _onTap(String index) {
           cardSelectProvider.updateIndex(index);
         }
 
         return Consumer<UserListProvider>(
             builder: (context, userProvider, child) {
           return GestureDetector(
-            onTap: () => _onTap(-1),
+            onTap: () => _onTap("-1"),
             child: CustomScrollView(slivers: [
               SliverPadding(
                 padding: EdgeInsets.all(10),

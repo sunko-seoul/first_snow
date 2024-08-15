@@ -6,6 +6,7 @@ import 'package:first_snow/provider/login_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:first_snow/view/signup_view.dart';
 import 'package:first_snow/view/password_reset_dialog.dart';
+import 'package:first_snow/provider/login_provider.dart'; // debug
 
 class SignInView extends StatefulWidget {
   const SignInView({super.key});
@@ -129,8 +130,11 @@ class _SignInViewState extends State<SignInView> {
   }
 
   void onLoginPress() async {
+    final loginProvider = context.read<LoginProvider>();
+    print('onLoginPress');
     if (saveAndValidateForm()) {
       String text = await context.read<LoginProvider>().signIn(email, password);
+      Navigator.of(context).pop();
       if (text != 'Success') {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:first_snow/const/color.dart';
-import 'package:first_snow/view/near_screen.dart';
-import 'package:first_snow/provider/user_list_provider.dart';
 import 'package:first_snow/component/user_match_card.dart';
-import 'package:first_snow/provider/tab_controller_provider.dart';
+import 'package:first_snow/stream/connect_stream.dart';
+
 
 class ConnectScreen extends StatelessWidget {
+  const ConnectScreen({super.key});
   @override
   Widget build(BuildContext context) {
-    return Consumer<UserListProvider>(builder: (context, userProvider, child) {
-      return connectScreen(userProvider.connectedUser);
-    });
+    return ConnectStream(); // firebase에서 받아와서 connectScreen에 전송
   }
 }
 
-GestureDetector connectScreen(Set<int> userList) {
+GestureDetector connectScreen(Set<String> userList) {
   return GestureDetector(
     onTap: () {},
     child: CustomScrollView(slivers: [

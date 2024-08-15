@@ -8,9 +8,20 @@ class UserProvider with ChangeNotifier {
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
   final FirebaseStorage _storage = FirebaseStorage.instance;
   final CollectionReference _usersCollection = FirebaseFirestore.instance.collection('users');
-
+  final CollectionReference _userListsCollection = FirebaseFirestore.instance.collection('userLists');
   Future<void> createUser(UserModel user) async {
-    await _usersCollection.doc(user.uid).set(user.toJson());
+    try {
+      await _usersCollection.doc(user.uid).set(user.toJson());
+      await _userListsCollection.doc(user.uid).set({
+        'nearList': [],
+        'todayList': [],
+        'receiveList': [],
+        'sendList': [],
+        'connectedList': [],
+      });
+    } catch (e) {
+      print('Failed to create user $e');
+    }
   }
 
   Future<UserModel> getUser(String uid) async {

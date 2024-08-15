@@ -10,6 +10,7 @@ import 'package:first_snow/provider/profile_oval_image_provider.dart';
 import 'dart:io';
 import 'package:first_snow/provider/client_user_provider.dart';
 import 'package:first_snow/const/color.dart';
+import 'packagE:first_snow/provider/bottom_nav_provider.dart';
 
 
 class ProfileEditScreen extends StatefulWidget {
@@ -132,7 +133,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     return Scaffold(
       appBar: MainAppBar(
         showBackButton: true,
-        selectedIndex: Provider.of<CardSelectProvider>(context).selectedIndex,
+        selectedIndex: Provider.of<BottomNavProvider>(context).selectedIndex,
         onBackButtonPressed: () => profileProvider.imageFile = null,
       ),
       body: SingleChildScrollView(

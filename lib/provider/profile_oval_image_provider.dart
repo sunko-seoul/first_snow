@@ -15,12 +15,16 @@ class ProfileOvalImageProvider with ChangeNotifier {
 
   // TODO: 이미지 픽해서 올리고, get으로 이미지 변환
   Future<void> pickImage() async {
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
+    try {
+      final pickedFile = await ImagePicker().pickImage(
+          source: ImageSource.gallery);
 
-    if (pickedFile != null) {
-      _imageFile = File(pickedFile.path);
-      notifyListeners();
+      if (pickedFile != null) {
+        _imageFile = File(pickedFile.path);
+        notifyListeners();
+      }
+    } catch (e) {
+      print("Error picking image: $e");
     }
   }
 }

@@ -7,13 +7,13 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool showBackButton;
   final int selectedIndex;
   final VoidCallback? onBackButtonPressed;
+
   MainAppBar({
-    Key? key,
     required this.selectedIndex,
     required this.showBackButton,
     this.onBackButtonPressed,
-
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
