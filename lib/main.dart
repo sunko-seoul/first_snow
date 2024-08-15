@@ -14,12 +14,15 @@ import 'package:first_snow/provider/card_select_provider.dart';
 import 'package:first_snow/provider/setting_provider.dart';
 import 'package:first_snow/provider/profile_oval_image_provider.dart';
 import 'package:first_snow/view/home_screen.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  final fcmToken = await FirebaseMessaging.instance.getToken();
+  print('fcmToken: $fcmToken');
   runApp(
     MultiProvider(providers: [
       ChangeNotifierProvider(create: (context) => LoginProvider()),
