@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:first_snow/provider/tab_controller_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -29,7 +30,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     super.initState();
 
     _notificationProvider = NotificationProvider();
-    _notificationProvider.init();
+    _notificationProvider.init(context);
+    _notificationProvider.showNotfication('init', 'init');
   }
 
   @override
@@ -55,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             index: bottomNavProvider.selectedIndex,
             onTap: (int index) {
               bottomNavProvider.updateIndex(index);
-              // _notificationProvider.showNotfication();
+              _notificationProvider.showNotfication('tab', 'tab');
             },
           );
         },

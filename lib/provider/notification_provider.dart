@@ -3,12 +3,14 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
+import 'package:provider/provider.dart';
+import 'package:first_snow/provider/bottom_nav_provider.dart';
 
 class NotificationProvider with ChangeNotifier {
   final FlutterLocalNotificationsPlugin _local =
       FlutterLocalNotificationsPlugin();
 
-  void _initialization() async {
+  void _initialization(BuildContext context) async {
     AndroidInitializationSettings android =
         const AndroidInitializationSettings("@mipmap/ic_launcher");
     DarwinInitializationSettings ios = const DarwinInitializationSettings(
@@ -18,11 +20,19 @@ class NotificationProvider with ChangeNotifier {
     );
     InitializationSettings settings =
         InitializationSettings(android: android, iOS: ios);
-    await _local.initialize(settings);
+    bool? initStatus = await _local.initialize(
+      settings,
+      onDidReceiveNotificationResponse: (NotificationResponse response) async {
+        if (response.payload == "alarm") {
+          Provider.of<BottomNavProvider>(context, listen: false).updateIndex(1);
+        }
+      },
+    );
+    print(initStatus);
   }
 
   void _permissionWithNotification() async {
-    if (await Permission.notification.isDenied &&
+    if (await Permission.notification.isDenied ||
         await Permission.notification.isPermanentlyDenied) {
       await [Permission.notification].request();
     }
@@ -42,12 +52,12 @@ class NotificationProvider with ChangeNotifier {
     ),
   );
 
-  void init() async {
+  void init(BuildContext context) async {
     tz.initializeTimeZones();
 
     _permissionWithNotification();
-    _initialization();
-    setPeriodicPushNotification(15, 2);
+    _initialization(context);
+    setPeriodicPushNotification(21, 57);
   }
 
   tz.TZDateTime _setDate(DateTime date) {
@@ -83,7 +93,7 @@ class NotificationProvider with ChangeNotifier {
     );
   }
 
-  void showNotfication() {
-    _local.show(1, "title", "body", details);
+  void showNotfication(String title, String body) {
+    _local.show(1, title, body, details, payload: "alarm");
   }
 }
