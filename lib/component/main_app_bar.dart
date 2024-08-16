@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 import 'package:first_snow/const/color.dart';
 import 'package:first_snow/component/send_recv_tab_bar.dart';
 
 class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool showBackButton;
-
   final int selectedIndex;
+  final VoidCallback? onBackButtonPressed;
+
   MainAppBar({
-    Key? key,
     required this.selectedIndex,
     required this.showBackButton,
-  }) : super(key: key);
+    this.onBackButtonPressed,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +24,9 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
           ? IconButton(
               icon: Icon(Icons.arrow_back),
               onPressed: () {
+                if (onBackButtonPressed != null) {
+                  onBackButtonPressed!();
+                }
                 Navigator.pop(context);
               },
             )

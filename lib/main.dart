@@ -1,11 +1,11 @@
-import 'package:first_snow/provider/tab_controller_provider.dart';
-import 'package:first_snow/provider/user_list_provider.dart';
-import 'package:first_snow/view/signin_view.dart';
-import 'package:first_snow/view/signup_view.dart';
+import 'package:first_snow/provider/client_user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:first_snow/provider/tab_controller_provider.dart';
+import 'package:first_snow/provider/user_list_provider.dart';
+import 'package:first_snow/view/signup_view.dart';
 import 'package:first_snow/provider/login_provider.dart';
 import 'package:first_snow/view/setup_view.dart';
 import 'package:first_snow/provider/user_provider.dart';
@@ -16,6 +16,7 @@ import 'package:first_snow/provider/profile_oval_image_provider.dart';
 import 'package:first_snow/view/home_screen.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'dart:async';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,6 +45,9 @@ void main() async {
     initialRoute = '/$initialRoute';
   }
 
+  final fcmToken = await FirebaseMessaging.instance.getToken();
+  print('fcmToken: $fcmToken');
+
   runApp(
     MultiProvider(
         providers: [
@@ -55,6 +59,7 @@ void main() async {
           ChangeNotifierProvider(create: (context) => TabControllerProvider()),
           ChangeNotifierProvider(create: (context) => UserListProvider()),
           ChangeNotifierProvider(create: (_) => ProfileOvalImageProvider()),
+          ChangeNotifierProvider(create: (context) => ClientUserProvider()),
         ],
         child: MyApp(
           initialRoute: initialRoute,

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 class CardSelectProvider with ChangeNotifier {
-  int _selectedIndex = -1;
+  String _selectedIndex = "-1";
 
-  int get selectedIndex => _selectedIndex;
+  String get selectedIndex => _selectedIndex;
 
-  void updateIndex(int index) {
-    _selectedIndex = _selectedIndex == -1 ? index : -1;
-    print('selInd: $_selectedIndex');
+  void updateIndex(String index) {
+    _selectedIndex = _selectedIndex == "-1" ? index : "-1";
+    print('selectedIndex: $_selectedIndex');
     notifyListeners();
   }
 }

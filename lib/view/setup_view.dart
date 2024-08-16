@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:first_snow/const/color.dart';
 import 'package:image_picker/image_picker.dart';
@@ -70,224 +68,230 @@ class _SetupViewState extends State<SetupView> {
 
     return Scaffold(
       appBar: AppBar(
+        // TODO: mainAppBar로 변경
         title: const Text('Image Setup'),
         backgroundColor: PRIMARY_COLOR,
       ),
       body: isProfileImageSetUp
-          ? Container(
-              color: PRIMARY_COLOR,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Center(
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 35.0),
-                      Text(
-                        '기본정보를 입력해주세요!',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20.0,
+          ? SingleChildScrollView(
+              child: Container(
+                color: PRIMARY_COLOR,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Center(
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 35.0),
+                        Text(
+                          '기본정보를 입력해주세요!',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20.0,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 40.0),
-                      CircleAvatar(
-                        radius: 120.0,
-                        backgroundImage: FileImage(File(profileImage!.path)),
-                      ),
-                      const SizedBox(height: 40.0),
-                      Column(
-                        children: [
-                          Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 67.0, right: 80.0),
-                                child: Text(
-                                  '이름',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16.0,
+                        const SizedBox(height: 40.0),
+                        CircleAvatar(
+                          radius: 120.0,
+                          backgroundImage: FileImage(File(profileImage!.path)),
+                        ),
+                        const SizedBox(height: 40.0),
+                        Column(
+                          children: [
+                            Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 67.0, right: 80.0),
+                                  child: Text(
+                                    '이름',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16.0,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(right: 33.0),
-                                  child: SizedBox(
-                                    width: 167.0,
-                                    height: 40.0,
-                                    child: TextField(
-                                      textAlignVertical: TextAlignVertical.top,
-                                      textAlign: TextAlign.center,
-                                      controller: _name,
-                                      decoration: InputDecoration(
-                                        contentPadding:
-                                            EdgeInsets.only(bottom: 11.0),
-                                        filled: true,
-                                        fillColor: Colors.white,
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide:
-                                              BorderSide(color: Colors.white),
-                                          borderRadius:
-                                              BorderRadius.circular(20.0),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide:
-                                              BorderSide(color: Colors.white),
-                                          borderRadius:
-                                              BorderRadius.circular(20.0),
-                                        ),
-                                        errorStyle: TextStyle(
-                                          color: Colors.red,
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 33.0),
+                                    child: SizedBox(
+                                      width: 167.0,
+                                      height: 40.0,
+                                      child: TextField(
+                                        textAlignVertical:
+                                            TextAlignVertical.top,
+                                        textAlign: TextAlign.center,
+                                        controller: _name,
+                                        decoration: InputDecoration(
+                                          contentPadding:
+                                              EdgeInsets.only(bottom: 11.0),
+                                          filled: true,
+                                          fillColor: Colors.white,
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide:
+                                                BorderSide(color: Colors.white),
+                                            borderRadius:
+                                                BorderRadius.circular(20.0),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide:
+                                                BorderSide(color: Colors.white),
+                                            borderRadius:
+                                                BorderRadius.circular(20.0),
+                                          ),
+                                          errorStyle: TextStyle(
+                                            color: Colors.red,
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 24.0),
-                          Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 67.0, right: 80.0),
-                                child: Text(
-                                  '나이',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16.0,
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(right: 33.0),
-                                  child: SizedBox(
-                                    width: 167.0,
-                                    height: 40.0,
-                                    child: TextField(
-                                      keyboardType: TextInputType.number,
-                                      inputFormatters: [
-                                        FilteringTextInputFormatter.digitsOnly,
-                                      ],
-                                      textAlign: TextAlign.center,
-                                      controller: _age,
-                                      decoration: InputDecoration(
-                                        contentPadding:
-                                            EdgeInsets.only(bottom: 11.0),
-                                        filled: true,
-                                        fillColor: Colors.white,
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide:
-                                              BorderSide(color: Colors.white),
-                                          borderRadius:
-                                              BorderRadius.circular(20.0),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide:
-                                              BorderSide(color: Colors.white),
-                                          borderRadius:
-                                              BorderRadius.circular(20.0),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 24.0),
-                          Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 67.0, right: 23.0),
-                                child: Text(
-                                  '인스타 아이디',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16.0,
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(right: 33.0),
-                                  child: SizedBox(
-                                    width: 167.0,
-                                    height: 40.0,
-                                    child: TextField(
-                                      textAlign: TextAlign.center,
-                                      controller: _instagramId,
-                                      decoration: InputDecoration(
-                                        contentPadding:
-                                            EdgeInsets.only(bottom: 11.0),
-                                        filled: true,
-                                        fillColor: Colors.white,
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide:
-                                              BorderSide(color: Colors.white),
-                                          borderRadius:
-                                              BorderRadius.circular(20.0),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide:
-                                              BorderSide(color: Colors.white),
-                                          borderRadius:
-                                              BorderRadius.circular(20.0),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 37.0),
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              foregroundColor: Colors.black,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50.0),
-                              ),
-                              minimumSize: Size(118.0, 56.0),
+                              ],
                             ),
-                            onPressed: _isButtonEnabled
-                                ? () async {
-                                    String? imagePath = await userProvider
-                                        .uploadImage(File(profileImage!.path));
-                                    final userInstance = UserModel(
-                                      uid: loginProvider.user!.uid,
-                                      email: user!.email,
-                                      name: _name.text,
-                                      age: int.tryParse(_age.text),
-                                      instagramId: _instagramId.text,
-                                      profileImagePath: imagePath,
-                                      createdAt: DateTime.now(),
-                                    );
-                                    userProvider.createUser(userInstance);
-                                    if (!mounted) return;
-                                    Navigator.of(context).pushReplacement(
-                                      MaterialPageRoute(
-                                        builder: (context) => HomeScreen(),
+                            const SizedBox(height: 24.0),
+                            Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 67.0, right: 80.0),
+                                  child: Text(
+                                    '나이',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16.0,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 33.0),
+                                    child: SizedBox(
+                                      width: 167.0,
+                                      height: 40.0,
+                                      child: TextField(
+                                        keyboardType: TextInputType.number,
+                                        inputFormatters: [
+                                          FilteringTextInputFormatter
+                                              .digitsOnly,
+                                        ],
+                                        textAlign: TextAlign.center,
+                                        controller: _age,
+                                        decoration: InputDecoration(
+                                          contentPadding:
+                                              EdgeInsets.only(bottom: 11.0),
+                                          filled: true,
+                                          fillColor: Colors.white,
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide:
+                                                BorderSide(color: Colors.white),
+                                            borderRadius:
+                                                BorderRadius.circular(20.0),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide:
+                                                BorderSide(color: Colors.white),
+                                            borderRadius:
+                                                BorderRadius.circular(20.0),
+                                          ),
+                                        ),
                                       ),
-                                    );
-                                  }
-                                : null,
-                            child: Text(
-                              '다음으로',
-                              style: TextStyle(
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 24.0),
+                            Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 67.0, right: 23.0),
+                                  child: Text(
+                                    '인스타 아이디',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16.0,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 33.0),
+                                    child: SizedBox(
+                                      width: 167.0,
+                                      height: 40.0,
+                                      child: TextField(
+                                        textAlign: TextAlign.center,
+                                        controller: _instagramId,
+                                        decoration: InputDecoration(
+                                          contentPadding:
+                                              EdgeInsets.only(bottom: 11.0),
+                                          filled: true,
+                                          fillColor: Colors.white,
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide:
+                                                BorderSide(color: Colors.white),
+                                            borderRadius:
+                                                BorderRadius.circular(20.0),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide:
+                                                BorderSide(color: Colors.white),
+                                            borderRadius:
+                                                BorderRadius.circular(20.0),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 37.0),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.white,
+                                foregroundColor: Colors.black,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(50.0),
+                                ),
+                                minimumSize: Size(118.0, 56.0),
+                              ),
+                              onPressed: _isButtonEnabled
+                                  ? () async {
+                                      String? imagePath =
+                                          await userProvider.uploadImage(
+                                              File(profileImage!.path));
+                                      final userInstance = UserModel(
+                                        uid: loginProvider.user!.uid,
+                                        email: user!.email,
+                                        name: _name.text,
+                                        age: int.tryParse(_age.text),
+                                        instagramId: _instagramId.text,
+                                        profileImagePath: imagePath,
+                                        createdAt: DateTime.now(),
+                                      );
+                                      userProvider.createUser(userInstance);
+                                      if (!mounted) return;
+                                      Navigator.of(context).pushReplacement(
+                                        MaterialPageRoute(
+                                          builder: (context) => HomeScreen(),
+                                        ),
+                                      );
+                                    }
+                                  : null,
+                              child: Text(
+                                '다음으로',
+                                style: TextStyle(
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

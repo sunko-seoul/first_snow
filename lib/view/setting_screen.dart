@@ -1,17 +1,16 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../provider/setting_provider.dart';
 import 'package:first_snow/view/profile_edit_screen.dart';
-import 'package:first_snow/component/profile_oval_image.dart';
 import 'dart:math';
+import 'package:first_snow/provider/client_user_provider.dart';
+import 'package:first_snow/const/color.dart';
 
 class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final settingProvider = Provider.of<SettingProvider>(context);
-
+    final clientUserProvider = Provider.of<ClientUserProvider>(context);
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 24),
       child: Theme(
@@ -24,7 +23,18 @@ class SettingsPage extends StatelessWidget {
           child: Column(
             children: [
               Padding(padding: EdgeInsets.only(top: 16)),
-              ProfileOvalImage(size: 128),
+              Consumer<ClientUserProvider>(// update
+                  builder: (context, clientUserProvider, child) {
+                return ClipOval(
+                  child: SizedBox(
+                    width: 128.0,
+                    height: 128.0,
+                    child: FittedBox(
+                        fit: BoxFit.cover,
+                        child: clientUserProvider.profileImage),
+                  ),
+                );
+              }),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: FilledButton(
@@ -35,16 +45,8 @@ class SettingsPage extends StatelessWidget {
                           builder: (context) => ProfileEditScreen()),
                     );
                   },
-                  child: Text(
-                    '프로필 수정',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
                   style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all(Colors.blue[100]),
+                    backgroundColor: WidgetStateProperty.all(PRIMARY_COLOR),
                     padding: WidgetStateProperty.all(
                       EdgeInsets.symmetric(horizontal: 16),
                     ),
@@ -54,12 +56,20 @@ class SettingsPage extends StatelessWidget {
                       ),
                     ),
                   ),
+                  child: Text(
+                    '프로필 수정',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
                 ),
               ),
               SwitchListTile(
                 title: Text('푸시 알림', style: TextStyle(fontSize: 20)),
                 value: settingProvider.notificationsEnabled,
-                activeColor: Colors.blue[100], // 색깔 추후 변경
+                activeColor: PRIMARY_COLOR, // 색깔 추후 변경
                 contentPadding: EdgeInsets.zero,
                 onChanged: (value) {
                   settingProvider.toggleNotifications();
@@ -118,7 +128,7 @@ class listElement extends StatelessWidget {
   final Widget? icon;
   final Widget? text;
 
-  listElement({required this.onTap, this.icon, this.text});
+  listElement({required this.onTap, this.icon, this.text, super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -1,45 +1,35 @@
+import 'package:first_snow/component/user_report_pop_up.dart';
 import 'package:first_snow/const/color.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'dart:ui';
-
-import 'package:first_snow/view/profile_screen.dart';
-
 import 'package:provider/provider.dart';
 import 'package:first_snow/provider/user_list_provider.dart';
 import 'package:first_snow/provider/card_select_provider.dart';
-import 'package:first_snow/component/user_report_pop_up.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 class UserCard extends StatelessWidget {
-  final int userId;
+  final String userId;
 
   UserCard({
     required this.userId,
-    Key? key,
+    super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ProfileScreen(userId: userId),
-            ),
-          );
-        },
-        child: userCardFront(userId, context));
+    return  UserCardFront(userId: userId);
   }
 }
 
 class UserCardFlip extends StatefulWidget {
-  final int userId;
-  final int selectedIndex;
+  final String userId;
+  final String selectedIndex;
   final PageName pageName;
   final String denyStr;
   final String acceptStr;
-  final Function(int) onTap;
+  final Function(String) onTap;
 
   UserCardFlip({
     required this.userId,
@@ -48,7 +38,7 @@ class UserCardFlip extends StatefulWidget {
     required this.denyStr,
     required this.acceptStr,
     required this.onTap,
-    Key? key,
+    super.key,
   });
 
   @override
@@ -61,11 +51,14 @@ class _UserCardFlipState extends State<UserCardFlip> {
 
   @override
   Widget build(BuildContext context) {
-    if (_angle != 0 && widget.selectedIndex != widget.userId)
+    if (_angle != 0 && widget.selectedIndex != widget.userId) {
       _angle = (_angle + pi) % (2 * pi);
+    }
     return GestureDetector(
       onTap: () => setState(() {
-        if (widget.selectedIndex == -1) _angle = (_angle + pi) % (2 * pi);
+        if (widget.selectedIndex == "-1") {
+          _angle = (_angle + pi) % (2 * pi);
+        }
         widget.onTap(widget.userId);
       }),
       child: TweenAnimationBuilder(
@@ -81,70 +74,121 @@ class _UserCardFlipState extends State<UserCardFlip> {
               child: _isBack
                   ? userCardBack(widget.userId, widget.pageName,
                       widget.acceptStr, widget.denyStr)
-                  : userCardFront(widget.userId, context));
+                  : UserCardFront(userId: widget.userId));
         },
       ),
     );
   }
 }
 
-Widget userCardFront(int userId, BuildContext context) {
-  return ClipRRect(
-    borderRadius: BorderRadius.circular(10.0),
-    child: Stack(
-      children: [
-        Container(
-          decoration: BoxDecoration(
+class UserCardFront extends StatefulWidget {
+  final String userId;
+
+  const UserCardFront({
+    super.key,
+    required this.userId,
+  });
+
+  @override
+  State<UserCardFront> createState() => _UserCardFrontState();
+}
+
+class _UserCardFrontState extends State<UserCardFront> {
+  late Future<String?> _imageUrlFuture;
+
+  // TODO: _getImagePath를 build 안에 future로 넣어보기? 또는 didUpdate에서?
+  @override
+  void initState() {
+    super.initState();
+    _imageUrlFuture = _getImagePath(widget.userId);
+  }
+
+  Future<String?> _getImagePath(String userId) async {
+    final userListProvider = Provider.of<UserListProvider>(context, listen: false);
+    try {
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .get();
+      return userDoc['profileImagePath'];
+    } catch (e) {
+      print("Error fetching image URL: $e");
+      userListProvider.deleteUser(userId, PageName.near);
+      return null;
+    }
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<String?>(
+      future: _imageUrlFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError || !snapshot.hasData || snapshot.data == null) {
+          return SizedBox.shrink();
+        } else {
+          return ClipRRect(
             borderRadius: BorderRadius.circular(10.0),
-            image: DecorationImage(
-              image: AssetImage('asset/user/user_$userId.jpg'),
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
-        Positioned(
-          top: 0,
-          right: 0,
-          child: Container(
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.3),
-                  spreadRadius: 0,
-                  blurRadius: 20,
-                  offset: Offset(0, 0), // 그림자의 위치 조정
+            child: Stack(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0),
+                    image: DecorationImage(
+                      image: NetworkImage(snapshot.data!),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.3),
+                          spreadRadius: 0,
+                          blurRadius: 20,
+                          offset: Offset(0, 0), // 그림자의 위치 조정
+                        ),
+                      ],
+                    ),
+                    child: PopupMenuButton<int>(
+                      icon: Icon(Icons.more_vert, color: GREY_COLOR_10),
+                      onSelected: (int result) {
+                        print('result: $result');
+                        if (result == 1) {
+                          showDialog(
+                              context: context,
+                              barrierColor: Colors.grey.withOpacity(0.5),
+                              builder: (BuildContext context) {
+                                return BackdropFilter(
+                                  filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                                  child: ReportPopUp(),
+                                );
+                              });
+                        }
+                      },
+                      itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
+                        const PopupMenuItem(value: 1, child: Text('신고하기')),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),
-            child: PopupMenuButton<int>(
-              icon: Icon(Icons.more_vert, color: GREY_COLOR_10),
-              onSelected: (int result) {
-                print('result: $result');
-                if (result == 1) {
-                  showDialog(
-                      context: context,
-                      barrierColor: Colors.grey.withOpacity(0.5),
-                      builder: (BuildContext context) {
-                        return BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                          child: ReportPopUp(),
-                        );
-                      });
-                }
-              },
-              itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
-                const PopupMenuItem(value: 1, child: Text('신고하기')),
-              ],
-            ),
-          ),
-        ),
-      ],
-    ),
-  );
+          );
+        }
+      },
+    );
+  }
 }
 
 Widget userCardBack(
-    int userId, PageName pageName, String acceptStr, String denyStr) {
+    String userId, PageName pageName, String acceptStr, String denyStr) {
   return Container(
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(10.0),
@@ -172,7 +216,7 @@ Widget userCardBack(
                     onTap: () {
                       userListProvider.deleteUser(userId, pageName);
                       Provider.of<CardSelectProvider>(context, listen: false)
-                          .updateIndex(-1);
+                          .updateIndex("-1");
                     },
                     child: Container(
                       color: PRIMARY_COLOR_10,
@@ -201,7 +245,7 @@ Widget userCardBack(
                     onTap: () {
                       userListProvider.sendUser(userId, pageName);
                       Provider.of<CardSelectProvider>(context, listen: false)
-                          .updateIndex(-1);
+                          .updateIndex("-1");
                     },
                     child: Container(
                       color: PRIMARY_COLOR,

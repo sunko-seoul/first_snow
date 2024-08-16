@@ -1,8 +1,6 @@
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 
 enum Status {
   uninitialized,
@@ -33,11 +31,17 @@ class LoginProvider extends ChangeNotifier {
   }
 
   Future<void> setUserState() async {
-    final userDoc = await _fireStore.collection('users').doc(_user!.uid).get();
-    if (!userDoc.exists) {
-      _status = Status.authenticated;
-    } else {
-      _status = Status.profileCompleted;
+    try {
+      final userDoc = await _fireStore.collection('users')
+          .doc(_user!.uid)
+          .get();
+      if (!userDoc.exists) {
+        _status = Status.authenticated;
+      } else {
+        _status = Status.profileCompleted;
+      }
+    } catch (e) {
+      _status = Status.unauthenticated;
     }
   }
 
@@ -46,13 +50,8 @@ class LoginProvider extends ChangeNotifier {
     if (firebaseUser == null) {
       _status = Status.unauthenticated;
     } else {
-      final userDoc = await _fireStore.collection('users').doc(firebaseUser.uid).get();
-      if (!userDoc.exists) {
-        _status = Status.authenticated;
-      } else {
-        _status = Status.profileCompleted;
-      }
       _user = firebaseUser;
+      await setUserState();
     }
     notifyListeners();
   }
@@ -104,25 +103,15 @@ class LoginProvider extends ChangeNotifier {
   }
 
   Future<void> signOut() async {
-    await _auth.signOut();
-    _user = null;
-    _status = Status.unauthenticated;
-    notifyListeners();
+    print("signOut $_status");
+    try {
+      await _auth.signOut();
+      _user = null;
+      _status = Status.unauthenticated;
+      notifyListeners();
+      print('Signed out $_status');
+    } catch (e) {
+      print("Error signing out: $e");
+    }
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
