@@ -40,17 +40,18 @@ dependencies:
   firebase_auth: ^4.11.1
   provider: ^6.1.2
   uuid: ^3.0.5
-  image_picker: 1.1.2
+  image_picker: ^1.1.2
   image_gallery_saver: 2.0.3
   firebase_storage: ^11.6.7
   flutter_blue_plus: ^1.32.11
   firebase_messaging: ^14.9.4
-  flutter_local_notifications: ^14.0.0+1
   drift: ^2.19.1+1
   workmanager: ^0.5.2
   path_provider: ^2.1.4
   path: ^1.9.0
   get_it: ^7.7.0
+  flutter_local_notifications: ^17.2.2
+  permission_handler: ^11.3.1
 
 dev_dependencies:
   flutter_test:

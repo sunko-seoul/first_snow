@@ -9,7 +9,7 @@ import 'package:first_snow/const/color.dart';
 class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final settingsViewModel = Provider.of<SettingsViewModel>(context);
+    final settingProvider = Provider.of<SettingProvider>(context);
     final clientUserProvider = Provider.of<ClientUserProvider>(context);
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 24),
@@ -23,20 +23,18 @@ class SettingsPage extends StatelessWidget {
           child: Column(
             children: [
               Padding(padding: EdgeInsets.only(top: 16)),
-              Consumer<ClientUserProvider>( // update
-                builder: (context, clientUserProvider, child) {
-                  return ClipOval(
-                    child: SizedBox(
-                      width: 128.0,
-                      height: 128.0,
-                      child: FittedBox(
-                          fit: BoxFit.cover,
-                          child: clientUserProvider.profileImage
-                      ),
-                    ),
-                  );
-                }
-              ),
+              Consumer<ClientUserProvider>(// update
+                  builder: (context, clientUserProvider, child) {
+                return ClipOval(
+                  child: SizedBox(
+                    width: 128.0,
+                    height: 128.0,
+                    child: FittedBox(
+                        fit: BoxFit.cover,
+                        child: clientUserProvider.profileImage),
+                  ),
+                );
+              }),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: FilledButton(
@@ -70,11 +68,11 @@ class SettingsPage extends StatelessWidget {
               ),
               SwitchListTile(
                 title: Text('푸시 알림', style: TextStyle(fontSize: 20)),
-                value: settingsViewModel.notificationsEnabled,
+                value: settingProvider.notificationsEnabled,
                 activeColor: PRIMARY_COLOR, // 색깔 추후 변경
                 contentPadding: EdgeInsets.zero,
                 onChanged: (value) {
-                  settingsViewModel.toggleNotifications();
+                  settingProvider.toggleNotifications();
                 },
               ),
               Container(
@@ -99,7 +97,7 @@ class SettingsPage extends StatelessWidget {
               ),
               listElement(
                 onTap: () {
-                  settingsViewModel.showLogoutPopup(context);
+                  settingProvider.showLogoutPopup(context);
                 },
                 text: Text('로그아웃',
                     style: TextStyle(
@@ -109,7 +107,7 @@ class SettingsPage extends StatelessWidget {
               ),
               listElement(
                 onTap: () {
-                  settingsViewModel.showDeleteAccountPopup(context);
+                  settingProvider.showDeleteAccountPopup(context);
                 },
                 text: Text('회원 탈퇴',
                     style: TextStyle(

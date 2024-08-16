@@ -67,7 +67,8 @@ class _SetupViewState extends State<SetupView> {
     final user = loginProvider.user;
 
     return Scaffold(
-      appBar: AppBar( // TODO: mainAppBar로 변경
+      appBar: AppBar(
+        // TODO: mainAppBar로 변경
         title: const Text('Image Setup'),
         backgroundColor: PRIMARY_COLOR,
       ),

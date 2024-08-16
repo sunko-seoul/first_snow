@@ -16,6 +16,8 @@ import 'package:first_snow/provider/card_select_provider.dart';
 import 'package:first_snow/provider/setting_provider.dart';
 import 'package:first_snow/provider/profile_oval_image_provider.dart';
 import 'package:first_snow/view/home_screen.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'dart:async';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:first_snow/database/bt_communicate.dart';
 import 'package:first_snow/background/background_service.dart';
@@ -42,39 +44,85 @@ void main() async {
     frequency: Duration(minutes: 20),
   );
 
+  Future<String?> getInitialRoute() async {
+    FlutterLocalNotificationsPlugin localNotification =
+        FlutterLocalNotificationsPlugin();
+
+    NotificationAppLaunchDetails? details =
+        await localNotification.getNotificationAppLaunchDetails();
+    if (details != null) {
+      if (details.didNotificationLaunchApp) {
+        if (details.notificationResponse?.payload != null) {
+          return details.notificationResponse!.payload!;
+        }
+      }
+    }
+    return null;
+  }
+
+  String? initialRoute = await getInitialRoute();
+  if (initialRoute != null) {
+    initialRoute = '/$initialRoute';
+  }
+
   runApp(
-    MultiProvider(providers: [
-      ChangeNotifierProvider(create: (context) => LoginProvider()),
-      ChangeNotifierProvider(create: (context) => UserProvider()),
-      ChangeNotifierProvider(create: (context) => BottomNavProvider()),
-      ChangeNotifierProvider(create: (context) => CardSelectProvider()),
-      ChangeNotifierProvider(create: (context) => SettingsViewModel()),
-      ChangeNotifierProvider(create: (context) => TabControllerProvider()),
-      ChangeNotifierProvider(create: (context) => UserListProvider()),
-      ChangeNotifierProvider(create: (_) => ProfileOvalImageProvider()),
-      ChangeNotifierProvider(create: (context) => ClientUserProvider()),
-    ], child: MyApp()),
+    MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context) => LoginProvider()),
+          ChangeNotifierProvider(create: (context) => UserProvider()),
+          ChangeNotifierProvider(create: (context) => BottomNavProvider()),
+          ChangeNotifierProvider(create: (context) => CardSelectProvider()),
+          ChangeNotifierProvider(create: (context) => SettingProvider()),
+          ChangeNotifierProvider(create: (context) => TabControllerProvider()),
+          ChangeNotifierProvider(create: (context) => UserListProvider()),
+          ChangeNotifierProvider(create: (_) => ProfileOvalImageProvider()),
+          ChangeNotifierProvider(create: (context) => ClientUserProvider()),
+        ],
+        child: MyApp(
+          initialRoute: initialRoute,
+        )),
   );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final String? initialRoute;
+  const MyApp({
+    super.key,
+    this.initialRoute,
+  });
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'First Snow',
-        home: Consumer<LoginProvider>(
-          builder: (context, user, child) {
-            print('user.status: ${user.status}');
-            if (user.status == Status.authenticated) {
-              return SetupView();
-            } else if (user.status == Status.profileCompleted) {
-              return HomeScreen();
-            } else {
-              return SignUpView();
-            }
-          },
-        ));
+      routes: {
+        '/receive': (context) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            Provider.of<BottomNavProvider>(context, listen: false)
+                .updateIndex(2);
+          });
+          return HomeScreen();
+        },
+        '/alarm': (context) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            Provider.of<BottomNavProvider>(context, listen: false)
+                .updateIndex(1);
+          });
+          return HomeScreen();
+        },
+      },
+      title: 'First Snow',
+      initialRoute: initialRoute ?? '/',
+      home: Consumer<LoginProvider>(
+        builder: (context, user, child) {
+          if (user.status == Status.authenticated) {
+            return SetupView();
+          } else if (user.status == Status.profileCompleted) {
+            return HomeScreen();
+          } else {
+            return SignUpView();
+          }
+        },
+      ),
+    );
   }
 }
