@@ -5,6 +5,7 @@ import 'package:first_snow/view/profile_edit_screen.dart';
 import 'dart:math';
 import 'package:first_snow/provider/client_user_provider.dart';
 import 'package:first_snow/const/color.dart';
+import 'package:first_snow/view/test_page_screen.dart';
 
 class SettingsPage extends StatelessWidget {
   @override
@@ -115,6 +116,19 @@ class SettingsPage extends StatelessWidget {
                         fontSize: 20,
                         fontWeight: FontWeight.w400)),
               ),
+              listElement(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => TestPageScreen()),
+                  );
+                },
+                text: Text('테스트 페이지',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w400)),
+              )
             ],
           ),
         ),
