@@ -5,7 +5,7 @@ import 'package:first_snow/component/pop_up_message.dart';
 import 'package:first_snow/provider/login_provider.dart';
 import 'package:provider/provider.dart';
 
-class SettingsViewModel extends ChangeNotifier {
+class SettingProvider extends ChangeNotifier {
   bool _notificationsEnabled = true;
 
   bool get notificationsEnabled => _notificationsEnabled;
