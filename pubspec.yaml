@@ -44,7 +44,6 @@ dependencies:
   image_gallery_saver: 2.0.3
   firebase_storage: ^11.6.7
   flutter_blue_plus: ^1.32.11
-  firebase_messaging: ^14.9.4
   flutter_local_notifications: ^17.2.2
   permission_handler: ^11.3.1
   firebase_messaging: ^14.9.4
