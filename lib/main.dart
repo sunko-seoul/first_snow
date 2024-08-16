@@ -1,5 +1,7 @@
 import 'package:first_snow/provider/client_user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -15,14 +17,31 @@ import 'package:first_snow/provider/setting_provider.dart';
 import 'package:first_snow/provider/profile_oval_image_provider.dart';
 import 'package:first_snow/view/home_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:first_snow/database/bt_communicate.dart';
+import 'package:first_snow/background/background_service.dart';
+import 'package:workmanager/workmanager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  final fcmToken = await FirebaseMessaging.instance.getToken();
-  print('fcmToken: $fcmToken');
+  // final fcmToken = await FirebaseMessaging.instance.getToken();
+  // print('fcmToken: $fcmToken');
+  final btDatabase = BTDatabase();
+  GetIt.I.registerSingleton<BTDatabase>(btDatabase);
+
+  Workmanager().initialize(
+    callbackDispatcher,
+    isInDebugMode: false,
+  );
+
+  Workmanager().registerPeriodicTask(
+    'BTScanTask',
+    'BTScanTask',
+    frequency: Duration(minutes: 20),
+  );
+
   runApp(
     MultiProvider(providers: [
       ChangeNotifierProvider(create: (context) => LoginProvider()),
