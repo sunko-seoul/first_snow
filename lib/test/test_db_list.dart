@@ -39,12 +39,21 @@ class _TestDbListState extends State<TestDbList> {
     }).toList();
   }
 
+  void deleteDBonPressed() {
+    GetIt.I<TestDatabase>().deleteAll();
+    onRefresh();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: RefreshIndicator(
         child: ListView(
-          children: _buildDriftTestTiles() ?? [Text('No Data')],
+          children: [
+            ElevatedButton(
+                onPressed: deleteDBonPressed, child: Text('delete DB')),
+            ..._buildDriftTestTiles() ?? [Text('No Data')],
+          ],
         ),
         onRefresh: onRefresh,
       ),

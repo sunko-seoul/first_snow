@@ -51,6 +51,10 @@ class TestDatabase extends _$TestDatabase {
   Future<int> removeDriftTest(int id) {
     return (delete(driftTest)..where((tbl) => tbl.id.equals(id))).go();
   }
+
+  Future<int> deleteAll() {
+    return (delete(driftTest).go());
+  }
 }
 
 LazyDatabase _openConnection() {
