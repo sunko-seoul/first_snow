@@ -39,13 +39,22 @@ class _BluetoothDbListState extends State<BluetoothDbList> {
     }).toList();
   }
 
+  void deleteDBonPressed() {
+    GetIt.I<BTDatabase>().deleteAll();
+    onRefresh();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: RefreshIndicator(
         child: ListView(
           children: [
-            ListTile(
+            ElevatedButton(
+              onPressed: deleteDBonPressed,
+              child: Text('delete DB'),
+            ),
+            if (_btCommunicateData?.length != 0) ListTile(
               title: Text('data : ${_btCommunicateData?.last.data}'),
               subtitle: Text(
                   'data : ${_btCommunicateData?.last.date.toIso8601String()}'),

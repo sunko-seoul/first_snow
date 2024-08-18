@@ -7,6 +7,7 @@ import UIKit
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
+    SwiftFlutterBackgroundServicePlugin.taskIdentifier = "com.example.first_snow.bt_foreground"com.
     if #available(iOS 10.0, *) {
           UNUserNotificationCenter.current().delegate = self as? UNUserNotificationCenterDelegate
     }
