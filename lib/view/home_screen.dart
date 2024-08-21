@@ -32,7 +32,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     super.initState();
     _notificationProvider = NotificationProvider();
     _notificationProvider.init(context);
-    _notificationProvider.showNotfication('init', 'init');
     final clientUserProvider =
         Provider.of<ClientUserProvider>(context, listen: false);
     final userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -54,6 +53,20 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       // TODO: 어떤 에러처리?
     });
     userListProvider.fetchNearUsers();
+
+    FirebaseMessaging.onMessage.listen(
+      // fcm inApp case
+      (RemoteMessage message) {
+        if (message.notification != null) {
+          // print('Message: ${message.notification!.title}');
+          NotificationProvider().showNotfication(
+            message.notification!.title!,
+            message.notification!.body!,
+            message.data['payload'] ?? '',
+          );
+        }
+      },
+    );
   }
 
   @override
@@ -77,7 +90,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             index: bottomNavProvider.selectedIndex,
             onTap: (int index) {
               bottomNavProvider.updateIndex(index);
-              _notificationProvider.showNotfication('tab', 'tab');
             },
           );
         },

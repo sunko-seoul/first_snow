@@ -5,6 +5,11 @@ import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:provider/provider.dart';
 import 'package:first_snow/provider/bottom_nav_provider.dart';
+import 'package:http/http.dart' as http;
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'dart:convert';
+import 'dart:io';
+import 'package:first_snow/model/notification_payload_model.dart';
 
 class NotificationProvider with ChangeNotifier {
   final FlutterLocalNotificationsPlugin _local =
@@ -25,6 +30,10 @@ class NotificationProvider with ChangeNotifier {
       onDidReceiveNotificationResponse: (NotificationResponse response) async {
         if (response.payload == "alarm") {
           Provider.of<BottomNavProvider>(context, listen: false).updateIndex(1);
+        } else if (response.payload == "receive") {
+          Provider.of<BottomNavProvider>(context, listen: false).updateIndex(2);
+        } else if (response.payload == "match") {
+          Provider.of<BottomNavProvider>(context, listen: false).updateIndex(3);
         }
       },
     );
@@ -45,8 +54,8 @@ class NotificationProvider with ChangeNotifier {
       presentSound: true,
     ),
     android: AndroidNotificationDetails(
-      "1",
-      "test",
+      "first_snow",
+      "첫눈",
       importance: Importance.max,
       priority: Priority.high,
     ),
@@ -57,7 +66,7 @@ class NotificationProvider with ChangeNotifier {
 
     _permissionWithNotification();
     _initialization(context);
-    setPeriodicPushNotification(21, 57);
+    setPeriodicPushNotification(22, 0); // 10시 알림
   }
 
   tz.TZDateTime _setDate(DateTime date) {
@@ -83,17 +92,37 @@ class NotificationProvider with ChangeNotifier {
     print(schedule);
     await _local.zonedSchedule(
       1,
-      "title",
-      "body",
+      "첫눈",
+      "어제 하루동안 스친 사람들을 확인해보세요!",
       schedule,
       details,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
       matchDateTimeComponents: DateTimeComponents.time,
+      payload: "alarm",
     );
   }
 
-  void showNotfication(String title, String body) {
-    _local.show(1, title, body, details, payload: "alarm");
+  void showNotfication(String title, String body, String payload) {
+    _local.show(1, title, body, details, payload: payload);
+  }
+
+  Future<String?> postMessage(NotificationPayload payload) async {
+    try {
+      final url =
+          "https://us-central1-first-snow-1347c.cloudfunctions.net/sendPushNotification";
+
+      final response = await http.post(Uri.parse(url),
+          headers: {'Content-Type': 'application/json; charset=UTF-8'},
+          body: jsonEncode(payload.toJson()));
+      if (response.statusCode == 200) {
+        return null;
+      } else {
+        return "Faliure";
+      }
+    } on HttpException catch (error) {
+      print(error.message);
+      return error.message;
+    }
   }
 }
