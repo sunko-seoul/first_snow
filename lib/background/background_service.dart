@@ -16,9 +16,9 @@ void callbackDispatcher() {
       case 'BTScanTask':
         final database = BTDatabase();
         FlutterBluePlus.scanResults.listen((results) {
-          print('result len: ${results.length}');
+          // print('result len: ${results.length}');
           results.forEach((r) {
-            print('remoteId: ${r.device.remoteId.str}');
+            // print('remoteId: ${r.device.remoteId.str}');
             database.createBTCommunicate(
               BTCommunicateCompanion(
                 data: Value(r.device.remoteId.str),
@@ -37,7 +37,7 @@ void callbackDispatcher() {
           await Future.delayed(Duration(seconds: 20));
         }
       default:
-        print('Unknown task: $task');
+      // print('Unknown task: $task');
     }
     return Future.value(true);
   });
