@@ -38,7 +38,9 @@ class BTDatabase extends _$BTDatabase {
 
   Future<int> createBTCommunicate(BTCommunicateCompanion data) async {
     final existingData = await (select(bTCommunicate)
-          ..where((tbl) => tbl.data.equals(data.data.value)))
+          ..where((tbl) {
+            return tbl.data.equals(data.data.value);
+          }))
         .get();
     if (existingData.isEmpty) {
       print('insert data');
@@ -49,8 +51,23 @@ class BTDatabase extends _$BTDatabase {
     }
   }
 
+  Future<void> removeDuplicates() async {
+    await customStatement('''
+      DELETE FROM b_t_communicate
+      WHERE rowid NOT IN (
+        SELECT MIN(rowid)
+        FROM b_t_communicate
+        GROUP BY data
+      );
+    ''');
+  }
+
   Future<int> removeBTCommunicate(int id) {
     return (delete(bTCommunicate)..where((tbl) => tbl.id.equals(id))).go();
+  }
+
+  Future<int> deleteAll() async {
+    return (delete(bTCommunicate).go());
   }
 }
 

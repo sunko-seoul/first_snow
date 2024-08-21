@@ -1,6 +1,8 @@
+import 'package:first_snow/database/drift_test.dart';
 import 'package:flutter/material.dart';
 import 'package:workmanager/workmanager.dart';
 import 'package:first_snow/database/bt_communicate.dart';
+import 'package:first_snow/database/drift_test.dart';
 import 'package:drift/drift.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
@@ -15,6 +17,13 @@ void callbackDispatcher() {
     switch (task) {
       case 'BTScanTask':
         final database = BTDatabase();
+        final testDatabase = TestDatabase();
+        testDatabase.createDriftTestWDuplicate(
+          DriftTestCompanion(
+            date: Value(DateTime.now()),
+            data: Value('drift_test'),
+          ),
+        );
         FlutterBluePlus.scanResults.listen((results) {
           // print('result len: ${results.length}');
           results.forEach((r) {
@@ -30,6 +39,7 @@ void callbackDispatcher() {
         for (int i = 0; i < 60; i++) {
           try {
             debugPrint('Executing BTScanTask $i');
+            database.removeDuplicates();
             FlutterBluePlus.startScan(timeout: const Duration(seconds: 5));
           } catch (e) {
             debugPrint('Error while createing BTCommunicate');

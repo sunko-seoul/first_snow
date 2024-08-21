@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:first_snow/provider/client_user_provider.dart';
 import 'package:first_snow/provider/notification_provider.dart';
 import 'package:flutter/material.dart';
@@ -21,8 +23,9 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'dart:async';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:first_snow/database/bt_communicate.dart';
+import 'package:first_snow/database/drift_test.dart';
 import 'package:first_snow/background/background_service.dart';
-import 'package:workmanager/workmanager.dart';
+import 'package:first_snow/background/foreground_service.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -35,17 +38,20 @@ void main() async {
   print('fcmToken: $fcmToken');
   final btDatabase = BTDatabase();
   GetIt.I.registerSingleton<BTDatabase>(btDatabase);
+  final testDatabase = TestDatabase();
+  GetIt.I.registerSingleton<TestDatabase>(testDatabase);
 
-  Workmanager().initialize(
-    callbackDispatcher,
-    isInDebugMode: false,
-  );
+  await initializeBTService();
+  // Workmanager().initialize(
+  //   callbackDispatcher,
+  //   isInDebugMode: false,
+  // );
 
-  Workmanager().registerPeriodicTask(
-    'BTScanTask',
-    'BTScanTask',
-    frequency: Duration(minutes: 20),
-  );
+  // Workmanager().registerPeriodicTask(
+  //   'BTScanTask',
+  //   'BTScanTask',
+  //   frequency: Duration(minutes: 20),
+  // );
 
   Future<String?> getInitialRoute() async {
     FlutterLocalNotificationsPlugin localNotification =
