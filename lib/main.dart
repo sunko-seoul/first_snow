@@ -23,6 +23,7 @@ import 'package:first_snow/database/bt_communicate.dart';
 import 'package:first_snow/database/drift_test.dart';
 import 'package:first_snow/background/background_service.dart';
 import 'package:workmanager/workmanager.dart';
+import 'package:first_snow/provider/uuid_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -80,6 +81,7 @@ void main() async {
           ChangeNotifierProvider(create: (context) => UserListProvider()),
           ChangeNotifierProvider(create: (_) => ProfileOvalImageProvider()),
           ChangeNotifierProvider(create: (context) => ClientUserProvider()),
+          ChangeNotifierProvider(create: (context) => UuidProvider()),
         ],
         child: MyApp(
           initialRoute: initialRoute,

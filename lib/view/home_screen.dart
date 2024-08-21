@@ -15,8 +15,10 @@ import 'package:first_snow/provider/user_provider.dart';
 import 'package:first_snow/provider/login_provider.dart';
 import 'package:first_snow/model/user_model.dart';
 import 'package:first_snow/provider/user_list_provider.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:first_snow/provider/uuid_provider.dart';
 
-// TODO: UserCard 파이어베이스 key, value로 수정하기, 새로고침시 리스트 초기화하기
+// TODO: 새로고침시 리스트 초기화하기
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -27,18 +29,12 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   late NotificationProvider _notificationProvider;
 
-  @override
-  void initState() {
-    super.initState();
-    _notificationProvider = NotificationProvider();
-    _notificationProvider.init(context);
-    _notificationProvider.showNotfication('init', 'init');
-    final clientUserProvider =
-        Provider.of<ClientUserProvider>(context, listen: false);
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
-    final user = Provider.of<LoginProvider>(context, listen: false).user;
-    final userListProvider =
-        Provider.of<UserListProvider>(context, listen: false);
+  void setUserInfo() {
+    final clientUserProvider = Provider.of<ClientUserProvider>(context, listen: false);
+    final userProvider = Provider.of<UserProvider>(context, listen: false); // 서버 접근
+    final user = Provider.of<LoginProvider>(context, listen: false).user; // UID
+    final userListProvider = Provider.of<UserListProvider>(context, listen: false);
+    final uuidProvider = Provider.of<UuidProvider>(context, listen: false);
     Future<UserModel> userModel = userProvider.getUser(user!.uid);
     userModel.then((value) {
       clientUserProvider.setClientInfo(
@@ -49,11 +45,21 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         profileImage: Image.network(value.profileImagePath!),
       );
       userListProvider.uid = user.uid;
+      uuidProvider.verifyUuidMatch(user.uid);
     }).catchError((e) {
       print("Error fetching user: $e");
-      // TODO: 어떤 에러처리?
     });
-    userListProvider.fetchNearUsers();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _notificationProvider = NotificationProvider();
+    _notificationProvider.init(context);
+    _notificationProvider.showNotfication('init', 'init');
+    final userListProvider = Provider.of<UserListProvider>(context, listen: false);
+    setUserInfo();
+    userListProvider.fetchNearUsers(); // 서버 전체 유저 가져오는 함수
   }
 
   @override
