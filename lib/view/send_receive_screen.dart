@@ -6,7 +6,6 @@ import 'package:first_snow/stream/send_stream.dart';
 import 'package:first_snow/stream/receive_stream.dart';
 
 class SendReceiveScreen extends StatelessWidget {
-
   SendReceiveScreen({super.key});
 
   @override
@@ -18,8 +17,8 @@ class SendReceiveScreen extends StatelessWidget {
             controller:
                 Provider.of<TabControllerProvider>(context).tabController,
             children: [
-                SendStream(),
-                ReceiveStream(),
+              ReceiveStream(),
+              SendStream(),
             ],
           ),
         ),
