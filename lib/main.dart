@@ -26,11 +26,13 @@ import 'package:first_snow/database/bt_communicate.dart';
 import 'package:first_snow/database/drift_test.dart';
 import 'package:first_snow/background/background_service.dart';
 import 'package:first_snow/background/foreground_service.dart';
+import 'package:first_snow/view/skeleton_screen.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -179,8 +181,10 @@ class MyApp extends StatelessWidget {
             return SetupView();
           } else if (user.status == Status.profileCompleted) {
             return HomeScreen();
-          } else {
+          } else if (user.status == Status.unauthenticated) {
             return SignUpView();
+          } else {
+            return SkeletonScreen();
           }
         },
       ),
