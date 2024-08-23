@@ -36,30 +36,42 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     final userListProvider = Provider.of<UserListProvider>(context, listen: false);
     final uuidProvider = Provider.of<UuidProvider>(context, listen: false);
     Future<UserModel> userModel = userProvider.getUser(user!.uid);
-    userModel.then((value) {
-      clientUserProvider.setClientInfo(
-        uid: user.uid,
-        name: value.name!,
-        age: value.age!,
-        instagramId: value.instagramId!,
-        profileImage: Image.network(value.profileImagePath!),
-      );
-      userListProvider.uid = user.uid;
-      uuidProvider.verifyUuidMatch(user.uid);
-    }).catchError((e) {
-      print("Error fetching user: $e");
+     userModel.then((value) {
+       clientUserProvider.setClientInfo(
+         uid: user.uid,
+         name: value.name!,
+         age: value.age!,
+         instagramId: value.instagramId!,
+         profileImage: Image.network(value.profileImagePath!),
+       );
+       userListProvider.uid = user.uid;
+       uuidProvider.verifyUuidMatch(user.uid);
+     }).catchError((e) {
+       print("Error fetching user: $e");
     });
-  }
+}
 
   @override
   void initState() {
     super.initState();
     _notificationProvider = NotificationProvider();
     _notificationProvider.init(context);
-    _notificationProvider.showNotfication('init', 'init');
     final userListProvider = Provider.of<UserListProvider>(context, listen: false);
     setUserInfo();
     userListProvider.fetchNearUsers(); // 서버 전체 유저 가져오는 함수
+    FirebaseMessaging.onMessage.listen(
+      // fcm inApp case
+      (RemoteMessage message) {
+        if (message.notification != null) {
+          // print('Message: ${message.notification!.title}');
+          _notificationProvider.showNotfication(
+            message.notification!.title!,
+            message.notification!.body!,
+            message.data['payload'] ?? '',
+          );
+        }
+      },
+    );
   }
 
   @override
@@ -83,7 +95,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             index: bottomNavProvider.selectedIndex,
             onTap: (int index) {
               bottomNavProvider.updateIndex(index);
-              _notificationProvider.showNotfication('tab', 'tab');
             },
           );
         },

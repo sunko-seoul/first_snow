@@ -10,7 +10,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
 import 'dart:io';
 
-
 @pragma('vm:entry-point')
 void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
@@ -40,6 +39,7 @@ void callbackDispatcher() {
         for (int i = 0; i < 60; i++) {
           try {
             debugPrint('Executing BTScanTask $i');
+            database.removeDuplicates();
             FlutterBluePlus.startScan(timeout: const Duration(seconds: 5));
           } catch (e) {
             debugPrint('Error while createing BTCommunicate');
@@ -47,7 +47,7 @@ void callbackDispatcher() {
           await Future.delayed(Duration(seconds: 20));
         }
       default:
-        print('Unknown task: $task');
+      // print('Unknown task: $task');
     }
     return Future.value(true);
   });
