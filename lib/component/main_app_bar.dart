@@ -22,47 +22,53 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: WHITE_COLOR,
       leading: showBackButton
           ? IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () {
-                if (onBackButtonPressed != null) {
-                  onBackButtonPressed!();
-                }
-                Navigator.pop(context);
-              },
-            )
+        icon: Icon(Icons.arrow_back),
+        onPressed: () {
+          if (onBackButtonPressed != null) {
+            onBackButtonPressed!();
+          }
+          Navigator.pop(context);
+        },
+      )
           : null,
-      flexibleSpace: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Align(
-            alignment: Alignment.center,
-            child: SvgPicture.asset(
-              'asset/img/logo.svg',
-              height: 32,
-              semanticsLabel: 'main_logo',
-            ),
-          ),
-        ],
-      ),
-      bottom: selectedIndex == 1
-          ? PreferredSize(
-              preferredSize: Size.fromHeight(48.0),
-              child: Container(
-                  height: 48.0,
+      flexibleSpace: SafeArea(
+        child: Column(
+          children: [
+            SizedBox(height: 8.0), // Adjust for top spacing
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Align(
                   alignment: Alignment.center,
-                  child: Text(
-                    '오늘 스쳐지나간 사람들',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  )))
-          : selectedIndex == 2
-              ? PreferredSize(
-                  preferredSize: Size.fromHeight(48.0),
-                  child: SendRecvTabBar(),
-                )
-              : null,
+                  child: SvgPicture.asset(
+                    'asset/img/logo.svg',
+                    height: 32,
+                    semanticsLabel: 'main_logo',
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+      bottom: PreferredSize(
+        preferredSize: Size.fromHeight(48.0),
+        child: Container(
+          height: 48.0,
+          alignment: Alignment.center,
+          child: selectedIndex == 1
+              ? Text(
+            '오늘 스쳐지나간 사람들',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          )
+              : selectedIndex == 2
+              ? SendRecvTabBar()
+              : Container(), // 빈 컨테이너로 기본값 설정
+        ),
+      ),
       elevation: 4.0,
       shadowColor: BLACK_COLOR,
       centerTitle: true,
