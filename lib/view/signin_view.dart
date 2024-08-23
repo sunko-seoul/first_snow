@@ -6,7 +6,6 @@ import 'package:first_snow/provider/login_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:first_snow/view/signup_view.dart';
 import 'package:first_snow/view/password_reset_dialog.dart';
-import 'package:first_snow/provider/login_provider.dart'; // debug
 
 class SignInView extends StatefulWidget {
   const SignInView({super.key});

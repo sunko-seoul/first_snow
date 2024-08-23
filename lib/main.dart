@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:first_snow/provider/client_user_provider.dart';
 import 'package:first_snow/provider/notification_provider.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +24,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:first_snow/database/bt_communicate.dart';
 import 'package:first_snow/database/drift_test.dart';
 import 'package:first_snow/background/background_service.dart';
+import 'package:workmanager/workmanager.dart';
+import 'package:first_snow/provider/uuid_provider.dart';
 import 'package:first_snow/background/foreground_service.dart';
 import 'package:first_snow/view/skeleton_screen.dart';
 
@@ -125,6 +126,7 @@ void main() async {
           ChangeNotifierProvider(create: (context) => UserListProvider()),
           ChangeNotifierProvider(create: (_) => ProfileOvalImageProvider()),
           ChangeNotifierProvider(create: (context) => ClientUserProvider()),
+          ChangeNotifierProvider(create: (context) => UuidProvider()),
           ChangeNotifierProvider(create: (_) => NotificationProvider())
         ],
         child: MyApp(
