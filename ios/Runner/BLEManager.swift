@@ -36,14 +36,19 @@ class BLEManager: NSObject, ObservableObject {
         )
         service.characteristics = [characteristic]
         peripheralManager.add(service)
-        
-        let advertisementData = [CBAdvertisementDataServiceUUIDsKey: [serviceUUID]]
+        let customData = "sunko123".data(using: .utf8)!
+        let advertisementData: [String: Any] = [
+            CBAdvertisementDataServiceUUIDsKey: [serviceUUID],
+            CBAdvertisementDataLocalNameKey: "sunkoDevice",
+            CBAdvertisementDataManufacturerDataKey: customData
+            
+        ]
         peripheralManager.startAdvertising(advertisementData)
     }
     
     func startScan() {
         if let centralManager = centralManager, centralManager.state == .poweredOn {
-            centralManager.scanForPeripherals(withServices: nil, options: nil)
+            centralManager.scanForPeripherals(withServices: [serviceUUID], options: nil)
         }
     }
 }
@@ -65,14 +70,21 @@ extension BLEManager: CBCentralManagerDelegate {
             let uuid = peripheral.identifier.uuidString
             let localName = advertisementData[CBAdvertisementDataLocalNameKey] as? String ?? "Unknown"
             let isConnectable = advertisementData[CBAdvertisementDataIsConnectable] as? Bool ?? false
-            let manufacturerData = advertisementData[CBAdvertisementDataManufacturerDataKey] as? Data
+            
+            if let manufacturerData = advertisementData[CBAdvertisementDataManufacturerDataKey] as? Data {
+                let manufacturerDataString = manufacturerData.base64EncodedString()
+                print("Manufacturer Data: \(manufacturerDataString)")
+            } else {
+                print("Manufacturer Data is not available")
+            }
+            
             let serviceUUIDs = advertisementData[CBAdvertisementDataServiceUUIDsKey] as? [CBUUID] ?? []
             let txPowerLevel = advertisementData[CBAdvertisementDataTxPowerLevelKey] as? Int ?? 0
             let advertisementInfo: [String: Any] = [
                "uuid": uuid,
                "localName": localName,
                "isConnectable": isConnectable,
-               "manufacturerData": manufacturerData?.base64EncodedString() ?? "",
+               // "manufacturerData": manufacturerData?.base64EncodedString() ?? "",
                "serviceUUIDs": serviceUUIDs.map { $0.uuidString },
                "txPowerLevel": txPowerLevel
            ]
@@ -84,6 +96,7 @@ extension BLEManager: CBCentralManagerDelegate {
 extension BLEManager: CBPeripheralManagerDelegate {
     func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
         if peripheral.state == .poweredOn {
+            print("start advetising")
             startAdvertising()
         }
     }
