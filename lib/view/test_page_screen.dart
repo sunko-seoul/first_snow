@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:first_snow/test/test_db_list.dart';
 import 'package:first_snow/test/bluetooth_db_list.dart';
+import 'package:first_snow/test/test_android_native.dart';
 import 'package:first_snow/test/ios_bluetooth.dart';
 
 class TestPageScreen extends StatelessWidget {
@@ -12,29 +13,24 @@ class TestPageScreen extends StatelessWidget {
     return Scaffold(
       body: ListView(
         children: [
-          ListTile(
-            title: Text('Background DB'),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => TestDbList()),
-            ),
-          ),
-          ListTile(
-            title: Text('Bluetooth DB'),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => BluetoothDbList()),
-            ),
-          ),
-          ListTile(
-            title: Text('Ios Bluetooth'),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => IOSBlueTooth()),
-            ),
-          ),
+          generateListTile(context, 'Background DB', () => TestDbList()),
+          generateListTile(context, 'Bluetooth DB', () => BluetoothDbList()),
+          generateListTile(context, 'Ios Bluetooth', () => IOSBlueTooth()),
+          generateListTile(
+              context, 'Android Native', () => TestAndroidNative()),
         ],
       ),
     );
   }
+}
+
+ListTile generateListTile(
+    BuildContext context, String title, Widget Function() pageBuilder) {
+  return ListTile(
+    title: Text(title),
+    onTap: () => Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => pageBuilder()),
+    ),
+  );
 }

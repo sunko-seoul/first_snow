@@ -1,0 +1,117 @@
+package com.example.first_snow
+
+import android.content.Context
+import androidx.core.content.ContextCompat
+import android.content.pm.PackageManager
+import android.os.Build
+import android.Manifest
+import android.app.Activity
+import androidx.core.app.ActivityCompat
+import androidx.annotation.RequiresApi
+import android.app.AlertDialog
+
+fun Context.hasPermission(permissionType: String): Boolean {
+    return ContextCompat.checkSelfPermission(this, permissionType) == PackageManager.PERMISSION_GRANTED
+}
+
+fun Context.hasRequiredBluetoothPermissions(): Boolean {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        hasPermission(Manifest.permission.BLUETOOTH_SCAN) && hasPermission(Manifest.permission.BLUETOOTH_CONNECT)
+    } else {
+        hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+    }
+}
+
+fun Activity.requestRelevantBluetoothPermissions(requestCode: Int) {
+    if (hasRequiredBluetoothPermissions()) {
+//        Timber.w("Required permission(s) for Bluetooth already granted")
+        return
+    }
+    when {
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+            if (bluetoothPermissionRationaleRequired()) {
+                displayNearbyDevicesPermissionRationale(requestCode)
+            } else {
+                requestNearbyDevicesPermissions(requestCode)
+            }
+        }
+        Build.VERSION.SDK_INT < Build.VERSION_CODES.S -> {
+            if (locationPermissionRationaleRequired()) {
+                displayLocationPermissionRationale(requestCode)
+            } else {
+                requestLocationPermission(requestCode)
+            }
+        }
+    }
+}
+
+//region Location permission
+private fun Activity.locationPermissionRationaleRequired(): Boolean {
+    return ActivityCompat.shouldShowRequestPermissionRationale(
+        this,
+        Manifest.permission.ACCESS_FINE_LOCATION
+    )
+}
+
+private fun Activity.displayLocationPermissionRationale(requestCode: Int) {
+    runOnUiThread {
+        AlertDialog.Builder(this)
+            .setTitle(R.string.location_permission_required)
+            .setMessage(R.string.location_permission_rationale)
+            .setPositiveButton(android.R.string.ok) { _, _ ->
+                requestLocationPermission(requestCode)
+            }
+            .setNegativeButton(R.string.quit) { _, _ -> finishAndRemoveTask() }
+            .setCancelable(false)
+            .show()
+    }
+}
+
+private fun Activity.requestLocationPermission(requestCode: Int) {
+    ActivityCompat.requestPermissions(
+        this,
+        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+        requestCode
+    )
+}
+//endregion
+
+//region Nearby Devices permissions
+private fun Activity.bluetoothPermissionRationaleRequired(): Boolean {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        ActivityCompat.shouldShowRequestPermissionRationale(
+            this, Manifest.permission.BLUETOOTH_SCAN
+        ) || ActivityCompat.shouldShowRequestPermissionRationale(
+            this, Manifest.permission.BLUETOOTH_CONNECT
+        )
+    } else {
+        false
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.S)
+private fun Activity.displayNearbyDevicesPermissionRationale(requestCode: Int) {
+    runOnUiThread {
+        AlertDialog.Builder(this)
+            .setTitle(R.string.bluetooth_permission_required)
+            .setMessage(R.string.bluetooth_permission_rationale)
+            .setPositiveButton(android.R.string.ok) { _, _ ->
+                requestNearbyDevicesPermissions(requestCode)
+            }
+            .setNegativeButton(R.string.quit) { _, _ -> finishAndRemoveTask() }
+            .setCancelable(false)
+            .show()
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.S)
+private fun Activity.requestNearbyDevicesPermissions(requestCode: Int) {
+    ActivityCompat.requestPermissions(
+        this,
+        arrayOf(
+            Manifest.permission.BLUETOOTH_SCAN,
+            Manifest.permission.BLUETOOTH_CONNECT
+        ),
+        requestCode
+    )
+}

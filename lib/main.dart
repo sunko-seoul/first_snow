@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:first_snow/provider/client_user_provider.dart';
+import 'package:first_snow/test/test_android_native.dart';
 import 'package:first_snow/provider/notification_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
@@ -183,7 +184,7 @@ class MyApp extends StatelessWidget {
             return SetupView();
           } else if (user.status == Status.profileCompleted) {
             return HomeScreen();
-          } else if (user.status == Status.unauthenticated) {
+          } else {
             return SignUpView();
           } else {
             return SkeletonScreen();
