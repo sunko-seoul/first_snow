@@ -7,11 +7,17 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool showBackButton;
   final int selectedIndex;
   final VoidCallback? onBackButtonPressed;
+  final bool useWhiteLogo;
+  final bool usePrimaryColor;
+  final bool useElevation;
 
   MainAppBar({
     required this.selectedIndex,
     required this.showBackButton,
     this.onBackButtonPressed,
+    this.useWhiteLogo = false,
+    this.usePrimaryColor = false,
+    this.useElevation = true,
     super.key,
   });
 
@@ -19,7 +25,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     // int selectedIndex = Provider.of<BottomNavProvider>(context).selectedIndex;
     return AppBar(
-      backgroundColor: WHITE_COLOR,
+      backgroundColor: usePrimaryColor ? PRIMARY_COLOR : WHITE_COLOR,
       leading: showBackButton
           ? IconButton(
         icon: Icon(Icons.arrow_back),
@@ -41,7 +47,9 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
                 Align(
                   alignment: Alignment.center,
                   child: SvgPicture.asset(
-                    'asset/img/logo.svg',
+                    useWhiteLogo
+                        ? 'asset/img/logo_white.svg' // 흰색 로고
+                        : 'asset/img/logo.svg', // 기본 로고
                     height: 32,
                     semanticsLabel: 'main_logo',
                   ),
@@ -69,8 +77,8 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
               : Container(), // 빈 컨테이너로 기본값 설정
         ),
       ),
-      elevation: 4.0,
-      shadowColor: BLACK_COLOR,
+      elevation: useElevation ? 4.0 : 0.0, // useElevation에 따라 결정
+      shadowColor: useElevation ? BLACK_COLOR : null, // 그림자가 필요 없으면 null로 설정
       centerTitle: true,
       automaticallyImplyLeading: false,
     );
