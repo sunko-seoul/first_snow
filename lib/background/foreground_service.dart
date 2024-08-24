@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 import 'dart:async';
@@ -5,10 +6,10 @@ import 'dart:async';
 import 'package:first_snow/database/bt_communicate.dart';
 import 'package:first_snow/database/drift_test.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_background_service_android/flutter_background_service_android.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:drift/drift.dart';
 
 void startBackgroundService() {
@@ -62,18 +63,10 @@ void onStart(ServiceInstance service) async {
       FlutterLocalNotificationsPlugin();
 
   // bluetooth 관련 innitialize
+  const platform = MethodChannel('com.example.first_snow/android');
   final database = BTDatabase();
   final testDatabase = TestDatabase();
-  FlutterBluePlus.scanResults.listen((results) {
-    results.forEach((r) {
-      database.createBTCommunicate(
-        BTCommunicateCompanion(
-          data: Value(r.device.remoteId.str),
-          date: Value(DateTime.now()),
-        ),
-      );
-    });
-  });
+  // await platform.invokeMethod('BTAdvertising');
 
   int idx = 0;
 
@@ -109,7 +102,16 @@ void onStart(ServiceInstance service) async {
       // run foreground service
       try {
         print('Executing BTScanTask');
-        FlutterBluePlus.startScan(timeout: const Duration(seconds: 10));
+        // List<String> uuidList = List<String>.from(json.decode(await platform.invokeMethod('BTScanning')));
+        // for (String uuid in uuidList) {
+        //   print(uuid);
+        //   database.createBTCommunicate(
+        //     BTCommunicateCompanion(
+        //       date: Value(DateTime.now()),
+        //       data: Value(uuid),
+        //     ),
+        //   );
+        // }
       } catch (e) {
         debugPrint('Error while createing BTCommunicate');
       }

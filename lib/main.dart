@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:first_snow/provider/client_user_provider.dart';
+import 'package:first_snow/test/test_android_native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:get_it/get_it.dart';
@@ -125,7 +126,8 @@ class MyApp extends StatelessWidget {
           } else if (user.status == Status.profileCompleted) {
             return HomeScreen();
           } else {
-            return SignUpView();
+            return TestAndroidNative();
+            // return SignUpView();
           }
         },
       ),

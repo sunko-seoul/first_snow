@@ -44,21 +44,36 @@ class _BluetoothDbListState extends State<BluetoothDbList> {
     onRefresh();
   }
 
+  void deleteDuponPressed() {
+    GetIt.I<BTDatabase>().removeDuplicates();
+    onRefresh();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: RefreshIndicator(
         child: ListView(
           children: [
-            ElevatedButton(
-              onPressed: deleteDBonPressed,
-              child: Text('delete DB'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                ElevatedButton(
+                  onPressed: deleteDBonPressed,
+                  child: Text('delete DB'),
+                ),
+                ElevatedButton(
+                  onPressed: deleteDuponPressed,
+                  child: Text('RM Dup DB'),
+                ),
+              ],
             ),
-            if (_btCommunicateData?.length != 0) ListTile(
-              title: Text('data : ${_btCommunicateData?.last.data}'),
-              subtitle: Text(
-                  'data : ${_btCommunicateData?.last.date.toIso8601String()}'),
-            ),
+            if (_btCommunicateData?.length != 0)
+              ListTile(
+                title: Text('data : ${_btCommunicateData?.last.data}'),
+                subtitle: Text(
+                    'data : ${_btCommunicateData?.last.date.toIso8601String()}'),
+              ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
