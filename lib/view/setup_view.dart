@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:first_snow/model/user_model.dart';
 import 'package:flutter/services.dart';
 import 'package:first_snow/view/home_screen.dart';
+import 'package:first_snow/provider/uuid_provider.dart';
 
 // TODO: 성별
 class SetupView extends StatefulWidget {
@@ -64,6 +65,7 @@ class _SetupViewState extends State<SetupView> {
   Widget build(BuildContext context) {
     final loginProvider = Provider.of<LoginProvider>(context);
     final userProvider = Provider.of<UserProvider>(context);
+    final uuidProvider = Provider.of<UuidProvider>(context);
     final user = loginProvider.user;
 
     return Scaffold(
@@ -272,6 +274,11 @@ class _SetupViewState extends State<SetupView> {
                                         createdAt: DateTime.now(),
                                       );
                                       userProvider.createUser(userInstance);
+                                      String? uuid = await uuidProvider.getDeviceUUID();
+                                      uuidProvider.createUuidMapUid(
+                                          loginProvider.user!.uid,
+                                          uuid!,
+                                      );
                                       if (!mounted) return;
                                       Navigator.of(context).pushReplacement(
                                         MaterialPageRoute(

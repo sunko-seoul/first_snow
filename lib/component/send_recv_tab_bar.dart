@@ -17,13 +17,13 @@ class SendRecvTabBar extends StatelessWidget {
         tabs: [
           Tab(
             child: Text(
-              '내가 보낸',
+              '내가 받은',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ),
           Tab(
             child: Text(
-              '내가 받은',
+              '내가 보낸',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ),

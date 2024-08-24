@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:first_snow/test/test_db_list.dart';
 import 'package:first_snow/test/bluetooth_db_list.dart';
 import 'package:first_snow/test/test_android_native.dart';
+import 'package:first_snow/test/ios_bluetooth.dart';
 
 class TestPageScreen extends StatelessWidget {
   const TestPageScreen({super.key});
@@ -14,6 +15,7 @@ class TestPageScreen extends StatelessWidget {
         children: [
           generateListTile(context, 'Background DB', () => TestDbList()),
           generateListTile(context, 'Bluetooth DB', () => BluetoothDbList()),
+          generateListTile(context, 'Ios Bluetooth', () => IOSBlueTooth()),
           generateListTile(
               context, 'Android Native', () => TestAndroidNative()),
         ],
