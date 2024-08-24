@@ -184,7 +184,7 @@ class MyApp extends StatelessWidget {
             return SetupView();
           } else if (user.status == Status.profileCompleted) {
             return HomeScreen();
-          } else {
+          } else if (user.status == Status.unauthenticated) {
             return SignUpView();
           } else {
             return SkeletonScreen();
