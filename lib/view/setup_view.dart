@@ -383,7 +383,7 @@ class _SetupViewState extends State<SetupView> {
                     backgroundImage: profileImage != null
                         ? FileImage(File(profileImage!.path))
                         : AssetImage(
-                      'assets/img/minji.jpg',
+                      'asset/img/default_profile.jpg',
                     ),
                   ),
                   Positioned(
