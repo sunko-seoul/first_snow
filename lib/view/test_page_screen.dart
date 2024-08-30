@@ -4,6 +4,7 @@ import 'package:first_snow/test/test_db_list.dart';
 import 'package:first_snow/test/bluetooth_db_list.dart';
 import 'package:first_snow/test/test_android_native.dart';
 import 'package:first_snow/test/ios_bluetooth.dart';
+import 'package:first_snow/test/notification_view.dart';
 
 class TestPageScreen extends StatelessWidget {
   const TestPageScreen({super.key});
@@ -18,6 +19,8 @@ class TestPageScreen extends StatelessWidget {
           generateListTile(context, 'Ios Bluetooth', () => IOSBlueTooth()),
           generateListTile(
               context, 'Android Native', () => TestAndroidNative()),
+          generateListTile(
+              context, 'Notifiaction', () => NotificationTestView()),
         ],
       ),
     );
